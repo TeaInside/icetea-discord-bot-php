@@ -1,0 +1,14 @@
+{
+    "name": "teainside/discord_bot",
+    "description": "Discord Bot",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ammar Faizi",
+            "email": "ammarfaizi2@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}

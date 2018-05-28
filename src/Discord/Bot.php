@@ -19,12 +19,13 @@ final class Bot
 
 	public function run()
 	{
-		echo 11133;
 		$this->discord->on('ready', function ($discord) {
 			echo "Bot is ready.", PHP_EOL;
-
-			$discord->on('message', function ($message) use ($discord) {
-				pcntl_fork();
+			$x = pcntl_fork();
+			$discord->on('message', function ($message) use ($discord, $x) {
+				if ($x != 0) {
+					return;
+				}
 				echo "Recieved a message from {$message->author->username}: {$message->content}", PHP_EOL;
 
 				$guild_id = $message->channel->guild_id;
@@ -69,7 +70,6 @@ final class Bot
 	        	}
 			});
 		});
-		echo 11;
 		$this->discord->run();
 	}
 

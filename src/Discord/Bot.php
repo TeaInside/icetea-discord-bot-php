@@ -21,8 +21,9 @@ final class Bot
 	{
 		$this->discord->on('ready', function ($discord) {
 			echo "Bot is ready.", PHP_EOL;
-			$x = pcntl_fork();
-			$discord->on('message', function ($message) use ($discord, $x) {
+			
+			$discord->on('message', function ($message) use ($discord) {
+				$x = pcntl_fork();
 				if ($x != 0) {
 					return;
 				}

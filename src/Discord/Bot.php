@@ -23,10 +23,7 @@ final class Bot
 			echo "Bot is ready.", PHP_EOL;
 			
 			$discord->on('message', function ($message) use ($discord) {
-				$x = pcntl_fork();
-				if ($x != 0) {
-					return;
-				}
+				pcntl_async_signals();
 				echo "Recieved a message from {$message->author->username}: {$message->content}", PHP_EOL;
 
 				$guild_id = $message->channel->guild_id;

@@ -73,6 +73,7 @@ final class Bot
 	            		echo $e->getTraceAsString() . PHP_EOL;
 	        		});
 	        	}
+	        	exit;
 			});
 		});
 		$this->discord->run();

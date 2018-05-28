@@ -1,5 +1,6 @@
 <?php
 
+use Discord\Bot;
 use Discord\Discord;
 use Discord\Parts\Part;
 use Discord\Cache\Cache;
@@ -13,9 +14,9 @@ include __DIR__."/vendor/autoload.php";
 include __DIR__."/config.php";
 
 while (true) {
-  try {
+  try { echo 333;
     $discord = new Discord(["token" => TOKEN]);
-    $bot = new Bot($discord);
+    echo 555;$bot = new Bot($discord);
     $bot->run();
   } catch (Error $e) {
   }

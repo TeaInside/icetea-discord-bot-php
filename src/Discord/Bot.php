@@ -19,6 +19,7 @@ final class Bot
 
 	public function run()
 	{
+		echo 11133;
 		$this->discord->on('ready', function ($discord) {
 			echo "Bot is ready.", PHP_EOL;
 
@@ -41,12 +42,12 @@ final class Bot
 				}
 
 				if (
-					in_array($sr[0], ["sh", "!sh", "/sh", ".sh"]) &&
+					in_array(strtolower($sr[0]), ["sh", "!sh", "/sh", ".sh"]) &&
 					isset($sr[1])
 				) {
 					$f = "/tmp/".substr(sha1($sr[1].md5($sr[1])), 0, 5).".sh";
 					file_put_contents($f, "#!/usr/bin/env bash\n".$sr[1]);
-					shell_exec("sudo chmod +x /tmp/".$f);
+					shell_exec("sudo chmod +x ".$f);
 					
 					if (in_array($message->author->username, SUDOERS)) {	
 						$reply = shell_exec($f." 2>&1");
@@ -67,6 +68,8 @@ final class Bot
 	        	}
 			});
 		});
+		echo 11;
+		$this->discord->run();
 	}
 
 }

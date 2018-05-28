@@ -58,6 +58,10 @@ final class Bot
 						$reply = shell_exec("cd /home/limited && sudo -u limited ".$f." 2>&1");
 					}
 
+					if (preg_match("/Text file busy/s", $reply)) {
+						return;
+					}
+
 					$reply = "Shell Output:\n```".$reply."```";
 				}
 

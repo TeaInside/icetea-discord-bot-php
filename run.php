@@ -14,10 +14,13 @@ include __DIR__."/vendor/autoload.php";
 include __DIR__."/config.php";
 
 while (true) {
-  try { echo 333;
+  try {
     $discord = new Discord(["token" => TOKEN]);
-    echo 555;$bot = new Bot($discord);
+    $bot = new Bot($discord);
     $bot->run();
   } catch (Error $e) {
+  	echo "An error occured!\n\n";
+  	var_dump($e->getMessage());
+  	exit();
   }
 }

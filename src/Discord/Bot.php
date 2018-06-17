@@ -10,20 +10,27 @@ use Discord\Discord;
 final class Bot
 {
 	
+	/**
+	 * @var \Discord\Discord
+	 */	
 	private $discord;
 
+	/**
+	 * @param \Discord\Discord
+	 */
 	public function __construct(Discord $discord)
 	{
 		$this->discord = $discord;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function run()
 	{
 		$this->discord->on('ready', function ($discord) {
 			echo "Bot is ready.", PHP_EOL;
-			
 			$discord->on('message', function ($message) use ($discord) {
-				pcntl_async_signals();
 				echo "Recieved a message from {$message->author->username}: {$message->content}", PHP_EOL;
 
 				$guild_id = $message->channel->guild_id;

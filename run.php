@@ -17,7 +17,7 @@ register_shutdown_function("rehandle");
 
 function rehandle()
 {
-	shell_exec(REHANDLE);
+	// shell_exec(REHANDLE);
 }
 
 while (true) {

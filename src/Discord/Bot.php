@@ -5,11 +5,11 @@ namespace Discord;
 use Discord\Discord;
 
 /**
-* @author Ammar Faizi <ammarfaizi2@gmail.com>
-*/
+ * @author Ammar Faizi <ammarfaizi2@gmail.com>
+ * @license MIT
+ */
 final class Bot
 {
-	
 	/**
 	 * @var \Discord\Discord
 	 */	
@@ -60,7 +60,8 @@ final class Bot
 					if (in_array($message->author->username, SUDOERS)) {	
 						$reply = shell_exec($f." 2>&1");
 					} else {
-						$reply = shell_exec("cd /home/limited && sudo -u limited ".$f." 2>&1");
+						// $reply = shell_exec("cd /home/limited && sudo -u limited ".$f." 2>&1");
+						$reply = "Invalid user";
 					}
 
 					if (preg_match("/Text file busy/s", $reply)) {

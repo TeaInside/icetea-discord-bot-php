@@ -13,6 +13,13 @@ use Discord\Parts\Channel\Message;
 include __DIR__."/vendor/autoload.php";
 include __DIR__."/config.php";
 
+register_shutdown_function("rehandle");
+
+function rehandle()
+{
+	shell_exec(REHANDLE);
+}
+
 while (true) {
   try {
     $discord = new Discord(["token" => TOKEN]);

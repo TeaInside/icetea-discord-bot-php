@@ -21,7 +21,7 @@ function rehandle()
 	// shell_exec(REHANDLE);
 }
 
-pcntl_asign_signals(true);
+pcntl_asycn_signals(true);
 
 while (true) {
   try {

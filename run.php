@@ -10,6 +10,7 @@ use Discord\Parts\User\User;
 use Discord\Parts\Channel\Channel;
 use Discord\Parts\Channel\Message;
 
+
 include __DIR__."/vendor/autoload.php";
 include __DIR__."/config.php";
 
@@ -19,6 +20,8 @@ function rehandle()
 {
 	// shell_exec(REHANDLE);
 }
+
+pcntl_asign_signals(true);
 
 while (true) {
   try {

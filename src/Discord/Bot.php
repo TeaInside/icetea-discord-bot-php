@@ -31,10 +31,6 @@ final class Bot
 		$this->discord->on('ready', function ($discord) {
 			echo "Bot is ready.", PHP_EOL;
 			$discord->on('message', function ($message) use ($discord) {
-				$pid = pcntl_fork();
-				if ($pid === 0) {
-					exit;
-				}
 
 				echo "Recieved a message from {$message->author->username}: {$message->content}", PHP_EOL;
 

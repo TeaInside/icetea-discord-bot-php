@@ -32,7 +32,7 @@ final class Bot
 			echo "Bot is ready.", PHP_EOL;
 			$discord->on('message', function ($message) use ($discord) {
 				$pid = pcntl_fork();
-				if ($pid !== 0) {
+				if ($pid === 0) {
 					exit;
 				}
 

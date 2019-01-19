@@ -29,15 +29,17 @@ final class Bot
 	public function run()
 	{
 		$this->discord->on('ready', function ($discord) {
+			
 			echo "Bot is ready.", PHP_EOL;
+
 			$discord->on('message', function ($message) use ($discord) {
 
 				echo "Recieved a message from {$message->author->username}: {$message->content}", PHP_EOL;
 
 				$guild_id = $message->channel->guild_id;
 				$channel_id = $message->channel_id;
-				$guild = $discord->guilds->get('id', $guild_id);
-				$channel = $guild->channels->get('id', $channel_id);
+				$guild = $discord->guilds->get("id", $guild_id);
+				$channel = $guild->channels->get("id", $channel_id);
 
 				$s = $message->content;
 				$st = strtolower($s);
@@ -53,12 +55,13 @@ final class Bot
 					in_array(strtolower($sr[0]), ["sh", "!sh", "/sh", ".sh"]) &&
 					isset($sr[1])
 				) {
-					$f = "/tmp/".substr(sha1($sr[1].md5($sr[1])), 0, 5).".sh";
-					file_put_contents($f, "#!/usr/bin/env bash\n".$sr[1]);
-					shell_exec("sudo chmod +x ".$f);
+					// $f = "/tmp/".substr(sha1($sr[1].md5($sr[1])), 0, 5).".sh";
+					// file_put_contents($f, "#!/usr/bin/env bash\n".$sr[1]);
+					// shell_exec("sudo chmod +x ".$f);
 					
 					if (in_array($message->author->username, SUDOERS)) {	
 						$reply = shell_exec($f." 2>&1");
+						$reply = "handled";
 					} else {
 						// $reply = shell_exec("cd /home/limited && sudo -u limited ".$f." 2>&1");
 						$reply = "Invalid user";
@@ -80,6 +83,7 @@ final class Bot
 	        		});
 	        	}
 			});
+
 		});
 		$this->discord->run();
 	}

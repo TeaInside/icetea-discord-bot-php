@@ -63,7 +63,7 @@ final class Bot
 				)
 			);
 			$this->init([
-				"disabledEvents" => [Event::PRESENCE_UPDATE, Event::TYPING_START, Event::VOICE_STATE_UPDATE, Event::VOICE_SERVER_UPDATE, Event::GUILD_CREATE, Event::GUILD_DELETE, Event::GUILD_UPDATE, Event::CHANNEL_CREATE, Event::CHANNEL_UPDATE, Event::CHANNEL_DELETE, Event::GUILD_BAN_ADD, Event::GUILD_BAN_REMOVE, Event::MESSAGE_DELETE, Event::MESSAGE_DELETE_BULK, Event::MESSAGE_UPDATE, Event::GUILD_MEMBER_ADD, Event::GUILD_MEMBER_REMOVE, Event::GUILD_MEMBER_UPDATE, Event::GUILD_ROLE_CREATE, Event::GUILD_ROLE_DELETE, Event::GUILD_ROLE_UPDATE]
+				"disabledEvents" => [Event::TYPING_START, Event::VOICE_STATE_UPDATE, Event::VOICE_SERVER_UPDATE, Event::GUILD_CREATE, Event::GUILD_DELETE, Event::GUILD_UPDATE, Event::CHANNEL_CREATE, Event::CHANNEL_UPDATE, Event::CHANNEL_DELETE, Event::GUILD_BAN_ADD, Event::GUILD_BAN_REMOVE, Event::MESSAGE_DELETE, Event::MESSAGE_DELETE_BULK, Event::MESSAGE_UPDATE, Event::GUILD_MEMBER_ADD, Event::GUILD_MEMBER_REMOVE, Event::GUILD_MEMBER_UPDATE, Event::GUILD_ROLE_CREATE, Event::GUILD_ROLE_DELETE, Event::GUILD_ROLE_UPDATE]
 			]);
 			$this->eventHandler();
 			exit;
@@ -93,7 +93,7 @@ final class Bot
 					);
 					if (!pcntl_fork()) {
 						$this->init([
-							// "disabledEvents" => [Event::PRESENCE_UPDATE, Event::TYPING_START, Event::VOICE_STATE_UPDATE, Event::VOICE_SERVER_UPDATE, Event::GUILD_CREATE, Event::GUILD_DELETE, Event::GUILD_UPDATE, Event::CHANNEL_CREATE, Event::CHANNEL_UPDATE, Event::CHANNEL_DELETE, Event::GUILD_BAN_ADD, Event::GUILD_BAN_REMOVE, Event::MESSAGE_CREATE, Event::MESSAGE_DELETE, Event::MESSAGE_DELETE_BULK, Event::MESSAGE_UPDATE, Event::GUILD_MEMBER_ADD, Event::GUILD_MEMBER_REMOVE, Event::GUILD_MEMBER_UPDATE, Event::GUILD_ROLE_CREATE, Event::GUILD_ROLE_DELETE, Event::GUILD_ROLE_UPDATE]
+							"disabledEvents" => [Event::TYPING_START, Event::VOICE_STATE_UPDATE, Event::VOICE_SERVER_UPDATE, Event::GUILD_CREATE, Event::GUILD_DELETE, Event::GUILD_UPDATE, Event::CHANNEL_CREATE, Event::CHANNEL_UPDATE, Event::CHANNEL_DELETE, Event::GUILD_BAN_ADD, Event::GUILD_BAN_REMOVE, Event::MESSAGE_CREATE, Event::MESSAGE_DELETE, Event::MESSAGE_DELETE_BULK, Event::MESSAGE_UPDATE, Event::GUILD_MEMBER_ADD, Event::GUILD_MEMBER_REMOVE, Event::GUILD_MEMBER_UPDATE, Event::GUILD_ROLE_CREATE, Event::GUILD_ROLE_DELETE, Event::GUILD_ROLE_UPDATE]
 						]);
 						(new Radio($this->discord))->dispatch($v["guild_id"], $v["channel_id"]);
 						exit;
@@ -113,7 +113,6 @@ final class Bot
 	 */
 	private function eventHandler(): void
 	{
-		sleep(10000);
 		for ($i=__DISCORD_WORKERS + 1; $i--;) {
 			if ($i === 0) break;
 			if (!($pid = pcntl_fork())) {

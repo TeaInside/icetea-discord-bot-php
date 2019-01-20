@@ -57,7 +57,7 @@ class Radio
 					 */
 					function (VoiceClient $vc) {
 					    printf("[radio] Joined voice channel...\n");
-
+					    
 					    $it = 0;
 					    do {
 					    	

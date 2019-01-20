@@ -39,7 +39,7 @@ final class Response
 			$text = &$message->content
 		));
 
-		if (!($pid = pcntl_fork())) {
+		// if (!($pid = pcntl_fork())) {
 
 			$guild_id = $message->channel->guild_id;
 			$channel_id = $message->channel_id;
@@ -91,8 +91,8 @@ final class Response
 
 	    		var_dump("bbbb", $a, "aaaa");
 
-			exit;
-		}
+//			exit;
+//		}
 
 		return $pid;
 	}

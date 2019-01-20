@@ -54,7 +54,7 @@ final class Bot
 				print "Me\n\n";
 				$discord->joinVoiceChannel($channel, false, false, null)->then(function (VoiceClient $vc) {
 				    echo "Joined voice channel.\r\n";
-				    $vc->playFile(__DIR__."/me.mp3");
+				    $vc->playFile(__DIR__."/me.mp3")->otherwise(function($e){ echo "ERR: ".$e->getMessage(); });
 				}, function ($e) {
 				    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
 				});

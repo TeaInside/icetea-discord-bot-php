@@ -41,10 +41,10 @@ final class Response
 
 		if (!($pid = pcntl_fork())) {
 
-			$guild_id = &$message->channel->guild_id;
-			$channel_id = &$message->channel_id;
-			$guild = &$discord->guilds->get("id", $guild_id);
-			$channel = &$guild->channels->get("id", $channel_id);
+			$guild_id = $message->channel->guild_id;
+			$channel_id = $message->channel_id;
+			$guild = $this->discord->guilds->get("id", $guild_id);
+			$channel = $guild->channels->get("id", $channel_id);
 
 			cli_set_process_title("discordd receiver --guild_id={$guild} --channel_id={$channel_id}");
 

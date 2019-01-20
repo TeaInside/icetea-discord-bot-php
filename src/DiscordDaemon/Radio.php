@@ -35,8 +35,7 @@ class Radio
 	 */
 	public function dispatch(string &$guild_id, string &$channel_id): void
 	{
-		$this->discord->on("ready", function ($discord) {
-			var_dump(123);
+		$this->discord->on("ready", function ($discord) use (&$guild_id, &$channel_id) {
 			printf("Radio is ready!\n");
 
 			// Prepare radio

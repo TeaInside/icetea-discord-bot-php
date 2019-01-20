@@ -9,7 +9,7 @@ use Discord\Parts\Channel\Message;
  * @author Ammar Faizi <ammarfaizi2@gmail.com>
  * @license MIT
  */
-final class Bot
+final class Response
 {
 	/**
 	 * @var \Discord\Discord

@@ -58,21 +58,28 @@ class Radio
 					function (VoiceClient $vc) {
 					    printf("[radio] Joined voice channel...\n");
 
-					    $playList = scandir(__DISCORD_RADIO_PLAYLIST_DIR);
+					    $playList = glob(sprintf(
+					    	"%s/*.mp3",
+					    	__DISCORD_RADIO_PLAYLIST_DIR
+					    ));
+					    $i = 0;
 					    shuffle($playList);
-
-					    var_dump($playList);sleep(1000);
-
-					    // $handler = function () use ($vc) {
-					    // 	$vc->playFile(__DIR__."/me.mp3")
-						   //  	->then(function () use ($vc) {
-						   //  		$vc->play
-						   //  	})
-					    // 		->otherwise(function($e){ 
-					    // 			printf("Error: %s\n", $e->getMessage())
-					    // 		});
-					    // };
-
+					    $c = count($playList) - 1;
+					    $loopSong = function () use (&$loopSong, &$playList, &$i, $vc, &$c) {
+					    	if ($i === $c) {
+					    		$i = 0;
+					    	}
+					    	cli_set_process_title(
+								sprintf("discordd: radio --play --file=%s", $playList[$i])
+							);
+					    	printf("[radio] Playing %s\n", $playList[$i]);
+					    	$vc->playFile($playList[$i++])
+					    		->then($loopSong)
+						    	->otherwise(function($e){ 
+						    		printf("Error: %s\n", $e->getMessage());
+						    	});
+					    };
+					    $loopSong();
 					},
 
 					/**

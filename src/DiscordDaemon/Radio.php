@@ -87,7 +87,7 @@ class Radio
 								sprintf("discordd: radio --play --file=%s", $playList[$i])
 							);
 
-					    	printf("[radio] Playing %s\n", $playList[$i]);
+					    	printf("[radio] Playing %s...\n", $playList[$i]);
 					    	
 					    	$vc->setBitrate(128000)->then(
 					    		function () use (&$loopSong, &$playList, &$i, $vc, &$c) {

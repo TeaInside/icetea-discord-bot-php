@@ -3,6 +3,7 @@
 namespace Discord;
 
 use Discord\Discord;
+use Discord\Voice\VoiceClient;
 
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com>

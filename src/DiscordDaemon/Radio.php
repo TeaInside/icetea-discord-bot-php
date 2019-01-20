@@ -35,6 +35,8 @@ class Radio
 	 */
 	public function dispatch(string &$guild_id, string &$channel_id): void
 	{
+
+		cli_set_process_title(sprintf("discordd: radio --player"));
 		$this->discord->on("ready", function ($discord) use (&$guild_id, &$channel_id) {
 			printf("Radio is ready!\n");			
 
@@ -83,14 +85,15 @@ class Radio
 					    shuffle($playList);
 
 					    $loopSong = function () use (&$loopSong, &$playList, &$i, $vc, &$c) {
-					    	cli_set_process_title(
-								sprintf("discordd: radio --play --file=%s", $playList[$i])
-							);
-
 					    	printf("[radio] Playing %s...\n", $playList[$i]);
-					    	
 					    	$vc->setBitrate(128000)->then(
 					    		function () use (&$loopSong, &$playList, &$i, $vc, &$c) {
+					    			cli_set_process_title(
+					    				sprintf(
+					    					"discordd: radio --player --file=%s", 
+					    					$playList[$i % $c]
+					    				)
+					    			);
 						    		$vc->playFile($playList[$i++ % $c])
 							    		->then($loopSong)
 								    	->otherwise(function($e){ 

@@ -87,12 +87,13 @@ class Radio
 					    $loopSong = function () use (&$loopSong, &$playList, &$i, $vc, &$c) {
 					    	$vc->setBitrate(128000)->then(
 					    		function () use (&$loopSong, &$playList, &$i, $vc, &$c) {
-					    			cli_set_process_title(
+					    			$qq = cli_set_process_title(
 					    				sprintf(
 					    					"discordd: radio --player --file=%s", 
 					    					$playList[$i % $c]
 					    				)
 					    			);
+					    			var_dump($qq);
 					    			printf("[radio] Playing %s...; offset %d\n", $playList[$i], $i % $c);
 						    		$vc->playFile($playList[$i++ % $c])
 							    		->then($loopSong)

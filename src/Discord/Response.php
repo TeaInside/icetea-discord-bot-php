@@ -82,12 +82,14 @@ final class Response
 
 				cli_set_process_title("discordd send --guild_id={$guild} --channel_id={$channel_id} --content={$reply}");
 
-				$channel->sendMessage($reply)->then(function ($message) {
+				$a = $channel->sendMessage($reply)->then(function ($message) {
 	        		echo "The message was sent!", PHP_EOL;
 	    		})->otherwise(function ($e) {
 	        		echo "There was an error sending the message: {$e->getMessage()}", PHP_EOL;
 	        		echo $e->getTraceAsString() . PHP_EOL;
 	    		});
+
+	    		var_dump("bbbb", $a, "aaaa");
 
 			exit;
 		}

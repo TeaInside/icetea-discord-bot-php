@@ -2,6 +2,7 @@
 
 namespace DiscordDaemon;
 
+use Discord\Discord;
 use Discord\Voice\VoiceClient;
 
 /**
@@ -13,18 +14,18 @@ use Discord\Voice\VoiceClient;
 class Radio
 {	
 	/**
-	 * @var \Discord\Voice\VoiceClient
+	 * @var Discord\Discord
 	 */
 	private $vc;
 
 	/**
-	 * @param \Discord\Voice\VoiceClient $vc
+	 * @param Discord\Discord $discord
 	 *
 	 * Constructor.
 	 */
-	public function __construct(VoiceClient $vc)
+	public function __construct(Discord $discord)
 	{
-		$this->vc = $vc;
+		$this->discord = $discord;
 	}
 
 	/**
@@ -34,48 +35,66 @@ class Radio
 	 */
 	public function dispatch(string &$guild_id, string &$channel_id): void
 	{
-		$this->discord
-			->joinVoiceChannel(
-				$this->discord
-					->guilds
-					->get("id", $guild_id)
-					->channels->get("id", $guild),
-					false,false, null
-			)
-			->then(
-				
-				/**
-				 * Promise resolved.
-				 */
-				function (VoiceClient $vc) {
-				    printf("[radio] Joined voice channel...\n");
+		$this->discord->on("ready", function ($discord) {
+			var_dump(123);
+			printf("Radio is ready!\n");
 
-				    $playList = scandir(__DISCORD_RADIO_PLAYLIST_DIR);
-				    shuffle($playList);
+			// Prepare radio
+			$this
+				->discord
+				->joinVoiceChannel(
+					$this->discord
+						->guilds
+						->get("id", $guild_id)
+						->channels->get("id", $guild),
+						false, false, null
+				)
+				->then(
+					
+					/**
+					 * Promise resolved.
+					 */
+					function (VoiceClient $vc) {
+					    printf("[radio] Joined voice channel...\n");
 
-				    $handler = function () use ($vc) {
-				    	$vc->playFile(__DIR__."/me.mp3")
-					    	->then(function () use ($vc) {
-					    		$vc->play
-					    	})
-				    		->otherwise(function($e){ 
-				    			printf("Error: %s\n", $e->getMessage())
-				    		});
-				    };
+					    $playList = scandir(__DISCORD_RADIO_PLAYLIST_DIR);
+					    shuffle($playList);
 
-				},
+					    var_dump($playList);sleep(1000);
 
-				/**
-				 * Promise rejected.
-				 */
-				function ($e) {
-			    	printf(
-			    		"There was an error joining the voice channel: %s\n",
-			    		$e->getMessage()
-			    	); 
-				}
-			);
+					    // $handler = function () use ($vc) {
+					    // 	$vc->playFile(__DIR__."/me.mp3")
+						   //  	->then(function () use ($vc) {
+						   //  		$vc->play
+						   //  	})
+					    // 		->otherwise(function($e){ 
+					    // 			printf("Error: %s\n", $e->getMessage())
+					    // 		});
+					    // };
 
+					},
+
+					/**
+					 * Promise rejected.
+					 */
+					function ($e) {
+				    	printf(
+				    		"There was an error joining the voice channel: %s\n",
+				    		$e->getMessage()
+				    	); 
+					}
+				)->otherwise(
+					function ($e) {
+				    	printf(
+				    		"There was an error joining the voice channel: %s\n",
+				    		$e->getMessage()
+				    	); 
+					}
+				);
+			// end of prepare radio
+
+		});
+		$this->discord->run();
 		return;	
 	}
 

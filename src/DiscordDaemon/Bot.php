@@ -51,9 +51,6 @@ final class Bot
 
 		if (!($radioPid = pcntl_fork())) {
 			cli_set_process_title("discordd: radio_worker --memory-copy");
-			$this->init([
-				"disabledEvents" => [Event::PRESENCE_UPDATE, Event::TYPING_START, Event::VOICE_STATE_UPDATE, Event::VOICE_SERVER_UPDATE, Event::GUILD_CREATE, Event::GUILD_DELETE, Event::GUILD_UPDATE, Event::CHANNEL_CREATE, Event::CHANNEL_UPDATE, Event::CHANNEL_DELETE, Event::GUILD_BAN_ADD, Event::GUILD_BAN_REMOVE, Event::MESSAGE_CREATE, Event::MESSAGE_DELETE, Event::MESSAGE_DELETE_BULK, Event::MESSAGE_UPDATE, Event::GUILD_MEMBER_ADD, Event::GUILD_MEMBER_REMOVE, Event::GUILD_MEMBER_UPDATE, Event::GUILD_ROLE_CREATE, Event::GUILD_ROLE_DELETE, Event::GUILD_ROLE_UPDATE]
-			]);
 			$this->radio();
 			exit;	
 		}
@@ -81,35 +78,33 @@ final class Bot
 	 */
 	private function radio(): void
 	{
-		$this->discord->on("ready", function ($discord) {
-
-			foreach (__DISCORD_RADIO_STREAM_TARGET as $v) {
-				if (!(pcntl_fork())) {
-					if (isset($v["guild_id"], $v["channel_id"])) {
-						$this->discord = null;
-						cli_set_process_title(
-							sprintf(
-								"discordd: radio --channel_id=%s --guild_id=%s --playlist_dir=%s --loop --daemonize",
-								$v["channel_id"],
-								$v["guild_id"],
-								__DISCORD_RADIO_PLAYLIST_DIR
-							)
-						);
-						if (!pcntl_fork()) {
-							$this->init();
-							(new Radio($this->discord))->dispatch($v);
-							exit;
-						}
-						$status = null;
-						pcntl_wait($status);
+		$status = null;
+		foreach (__DISCORD_RADIO_STREAM_TARGET as $v) {
+			if (!(pcntl_fork())) {
+				if (isset($v["guild_id"], $v["channel_id"])) {
+					$this->discord = null;
+					cli_set_process_title(
+						sprintf(
+							"discordd: radio --channel_id=%s --guild_id=%s --playlist_dir=%s --loop --daemonize",
+							$v["channel_id"],
+							$v["guild_id"],
+							__DISCORD_RADIO_PLAYLIST_DIR
+						)
+					);
+					if (!pcntl_fork()) {
+						$this->init([
+							"disabledEvents" => [Event::PRESENCE_UPDATE, Event::TYPING_START, Event::VOICE_STATE_UPDATE, Event::VOICE_SERVER_UPDATE, Event::GUILD_CREATE, Event::GUILD_DELETE, Event::GUILD_UPDATE, Event::CHANNEL_CREATE, Event::CHANNEL_UPDATE, Event::CHANNEL_DELETE, Event::GUILD_BAN_ADD, Event::GUILD_BAN_REMOVE, Event::MESSAGE_CREATE, Event::MESSAGE_DELETE, Event::MESSAGE_DELETE_BULK, Event::MESSAGE_UPDATE, Event::GUILD_MEMBER_ADD, Event::GUILD_MEMBER_REMOVE, Event::GUILD_MEMBER_UPDATE, Event::GUILD_ROLE_CREATE, Event::GUILD_ROLE_DELETE, Event::GUILD_ROLE_UPDATE]
+						]);
+						(new Radio($this->discord))->dispatch($v["channel_id"], $v["guild_id"]);
+						exit;
 					}
-
-					exit;
+					pcntl_wait($status);
 				}
-			}
 
-		});
-		$this->discord->run();
+				exit;
+			}
+		}
+		pcntl_wait($status);
 		return;
 	}
 
@@ -118,7 +113,7 @@ final class Bot
 	 */
 	private function eventHandler(): void
 	{
-
+		sleep(10000);
 		for ($i=__DISCORD_WORKERS + 1; $i--;) {
 			if ($i === 0) break;
 			if (!($pid = pcntl_fork())) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Discord;
+namespace DiscordDaemon;
 
 use Discord\Discord;
 use Discord\Parts\Channel\Message;

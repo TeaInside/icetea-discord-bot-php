@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Discord\\": "src/Discord/"
+            "DiscordDaemon\\": "src/DiscordDaemon/"
         }
     }
 }

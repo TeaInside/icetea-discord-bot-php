@@ -1,4 +1,10 @@
+*.o
+*.so
+*.tmp
+*.swp
+*.swo
 *.log
+*.pid
 *.lock
 /vendor/
 /config.php

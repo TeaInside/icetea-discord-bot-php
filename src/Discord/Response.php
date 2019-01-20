@@ -48,13 +48,14 @@ final class Response
 
 			cli_set_process_title("discordd receiver --guild_id={$guild} --channel_id={$channel_id}");
 
-			if (preg_match($text, "/^[\/\!\.\~]ping$/")) {
+
+			if (preg_match("/^[\/\!\.\~]ping$/", $text)) {
 				$reply = "Pong!";
 				goto sendResponse;
 			}
 
 
-			if (preg_match($text, "/^(?:[\/\!\.\~]sh[\s\n])(.*)$/", $m)) {
+			if (preg_match("/^(?:[\/\!\.\~]sh[\s\n])(.*)$/", $text, $m)) {
 
 				$f = "/tmp/".substr(md5($m[1])), 0, 5).".sh";
 				file_put_contents($f, "#!/usr/bin/env bash\n".$sr[1]);

@@ -54,8 +54,8 @@ final class Bot
 				$guild_id = $message->channel->guild_id;
 				$channel_id = $message->channel_id;
 				$guild = $this->discord->guilds->get("id", $guild_id);
-				var_dump($guild->channels);
-				$channel = $guild->channels->get("id", $channel_id);
+				//var_dump($guild->channels);
+				$channel = $guild->channels->get("id", "446634690015657987");
 
 
 				// $response = new Response($discord);

@@ -49,6 +49,7 @@ final class Bot
 				}, function ($e) {
 				    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
 				});
+				print "Test\n";
 
 				// $guild_id = $message->channel->guild_id;
 				// $channel_id = $message->channel_id;

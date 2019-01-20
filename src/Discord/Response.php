@@ -64,8 +64,8 @@ final class Bot
 					$reply = shell_exec("{$text} 2>&1");
 					// $reply = "handled";
 				} else {
-					$reply = shell_exec("cd /home/limited && sudo -u limited {$f} 2>&1");
-					// $reply = "Invalid user";
+					// $reply = shell_exec("cd /home/limited && sudo -u limited {$f} 2>&1");
+					$reply = "Invalid user";
 				}
 
 				unlink($f);

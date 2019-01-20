@@ -28,7 +28,7 @@ final class Bot
 	 */
 	public function run()
 	{
-		$pidFile = __DIR__."/discordd.pid"
+		$pidFile = __DIR__."/discordd.pid";
 
 		file_put_contents($pidFile, getmypid());
 		cli_set_process_title("discordd --daemonize --pid_file={$pidFile} --pool");
@@ -66,7 +66,7 @@ final class Bot
 
 
 		});
-1
+
 		$this->discord->run();
 	}
 

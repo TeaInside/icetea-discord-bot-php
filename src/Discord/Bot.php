@@ -51,7 +51,7 @@ final class Bot
 				var_dump($channel);
 
 				print "Me\n\n";
-				$discord->joinVoiceChannel($channel, true, true, null)->then(function (VoiceClient $vc) {
+				$discord->joinVoiceChannel($channel, false, false, null)->then(function (VoiceClient $vc) {
 				    echo "Joined voice channel.\r\n";
 				    $vc->playFile(__DIR__."/me.mp3");
 				}, function ($e) {

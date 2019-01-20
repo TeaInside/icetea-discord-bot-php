@@ -93,7 +93,7 @@ class Radio
 					    					$playList[$i % $c]
 					    				)
 					    			);
-					    			printf("[radio] Playing %s...; offset %d\n", $playList[$i], $i % $c);
+					    			printf("[radio] Playing %s...; offset %d\n", $playList[$i % $c], $i % $c);
 						    		$vc->playFile($playList[$i++ % $c])
 							    		->then($loopSong)
 								    	->otherwise(function($e){ 

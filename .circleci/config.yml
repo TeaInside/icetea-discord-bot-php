@@ -1,0 +1,9 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: ubuntu
+    working_directory: ~/me
+    steps:
+      - checkout
+      - php -v

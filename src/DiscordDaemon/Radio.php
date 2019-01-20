@@ -42,10 +42,12 @@ class Radio
 			$this
 				->discord
 				->joinVoiceChannel(
-					$this->discord
+					$this
+						->discord
 						->guilds
 						->get("id", $guild_id)
-						->channels->get("id", $guild),
+						->channels
+						->get("id", $channel_id),
 						false, false, null
 				)
 				->then(

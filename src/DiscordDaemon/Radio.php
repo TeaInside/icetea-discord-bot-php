@@ -49,13 +49,20 @@ class Radio
 				 */
 				function (VoiceClient $vc) {
 				    printf("[radio] Joined voice channel...\n");
-				    printf("[radio] ");
 
+				    $playList = scandir(__DISCORD_RADIO_PLAYLIST_DIR);
+				    shuffle($playList);
 
-				    $vc->playFile(__DIR__."/me.mp3")
-				    	->otherwise(function($e){ 
-				    		printf("Error: %s\n", $e->getMessage())
-				    	});
+				    $handler = function () use ($vc) {
+				    	$vc->playFile(__DIR__."/me.mp3")
+					    	->then(function () use ($vc) {
+					    		$vc->play
+					    	})
+				    		->otherwise(function($e){ 
+				    			printf("Error: %s\n", $e->getMessage())
+				    		});
+				    };
+
 				},
 
 				/**

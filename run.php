@@ -14,6 +14,7 @@ pcntl_signal(SIGCHLD, SIG_IGN);
 
 include __DIR__."/vendor/autoload.php";
 include __DIR__."/config.php";
+include __DIR__."/sodium.php";
 
 while (true) {
   try {

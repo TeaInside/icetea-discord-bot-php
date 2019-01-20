@@ -42,18 +42,31 @@ final class Bot
 			 */
 			$discord->on("message", function (&$message) use (&$discord) {
 
-				$response = new Response($discord);
-				$response->onMessage($message);
+				$guild_id = $message->channel->guild_id;
+				$channel_id = $message->channel_id;
+				$guild = $this->discord->guilds->get("id", $guild_id);
+				$channel = $guild->channels->get("id", $channel_id);
 
-				$response = null;
-				unset($response, $message);
+
+				$discord->joinVoiceChannel($channel, false, true, null)->then(function (VoiceClient $vc) {
+				    echo "Joined voice channel.\r\n";
+				    $vc->playFile(__DIR__."/me.mp3");
+				}, function ($e) {
+				    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
+				});
+
+				// $response = new Response($discord);
+				// $response->onMessage($message);
+
+				// $response = null;
+				// unset($response, $message);
 
 				return;
 			});
 
 
 		});
-
+1
 		$this->discord->run();
 	}
 

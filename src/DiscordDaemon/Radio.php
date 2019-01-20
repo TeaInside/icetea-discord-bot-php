@@ -41,7 +41,7 @@ class Radio
 			var_dump($this
 						->discord
 						->guilds
-						->get("id", $guild_id));
+						->get("id", $guild_id)->channels);
 
 			die;
 

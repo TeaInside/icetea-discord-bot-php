@@ -10,6 +10,8 @@ use Discord\Parts\User\User;
 use Discord\Parts\Channel\Channel;
 use Discord\Parts\Channel\Message;
 
+
+
 pcntl_signal(SIGCHLD, SIG_IGN);
 
 include __DIR__."/vendor/autoload.php";

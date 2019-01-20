@@ -48,6 +48,7 @@ final class Response
 
 			cli_set_process_title("discordd receiver --guild_id={$guild} --channel_id={$channel_id}");
 
+			$reply = "me";
 
 			if (preg_match("/^[\/\!\.\~]ping$/", $text)) {
 				$reply = "Pong!";

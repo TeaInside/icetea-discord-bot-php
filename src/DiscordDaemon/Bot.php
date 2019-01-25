@@ -138,7 +138,7 @@ final class Bot
 					$a = (new Response($discord, $message))->run();
 					var_dump($a);	
 				} catch (\Error $e) {
-					var_dump($e);
+					var_dump($e->getMessage(), $e->getFile(), $e->getLine());
 				}
 				// $pool->submit(new Response($discord, $message));
 			});

@@ -39,7 +39,7 @@ class Response// extends Threaded
 		$guild_id = $this->message->channel->guild_id;
 		$channel_id = $this->message->channel_id;
 		$guild = $this->discord->guilds->get("id", $guild_id);
-		var_dump($guild->channels, $guild);
+		var_dump($guild_id, $guild->channels, $guild);
 		$channel = $guild->channels->get("id", $guild);
 		var_dump($channel);
 		

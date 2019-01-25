@@ -117,7 +117,7 @@ final class Bot
 	{
 		$pool = new Pool(15);
 
-		$this->discord->on("ready", function ($discord) {
+		$this->discord->on("ready", function ($discord) use ($pool) {
 			
 			printf("Bot is ready\n");
 

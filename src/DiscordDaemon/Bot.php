@@ -50,11 +50,11 @@ final class Bot
 			)
 		);
 
-		if (!($radioPid = pcntl_fork())) {
-			cli_set_process_title("discordd: radio_worker --memory-copy");
-			$this->radio();
-			exit;	
-		}
+		// if (!($radioPid = pcntl_fork())) {
+		// 	cli_set_process_title("discordd: radio_worker --memory-copy");
+		// 	$this->radio();
+		// 	exit;	
+		// }
 
 		if (!($eventHandlerPid = pcntl_fork())) {
 			cli_set_process_title(
@@ -122,6 +122,15 @@ final class Bot
 			printf("Bot is ready\n");
 
 			$discord->on("message", function ($message) use ($discord, $pool) {
+
+				$guild_id = $this->message->channel->guild_id;
+				$channel_id = $this->message->channel_id;
+				$guild = $this->discord->guilds->get("id", $guild_id);
+				$channel = $guild->channels->get("id", $guild);
+				
+				printf("Recieved a message from %s: %s\n", $this->message->author->username, json_encode(
+					$text = $message->content
+				));
 				$pool->submit(new Response($discord, $message));
 			});
 		});

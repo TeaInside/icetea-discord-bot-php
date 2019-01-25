@@ -49,20 +49,17 @@ final class Bot
 				__DISCORD_DAEMON_PID_FILE
 			)
 		);
-		$this->init([]);
-		$this->eventHandler();
-		sleep(1000 * 30);
 
-		// if (!($radioPid = pcntl_fork())) {
-		// 	cli_set_process_title("discordd: radio_worker --memory-copy");
-		// 	$this->radio();
-		// 	exit;	
-		// }
+		if (!($radioPid = pcntl_fork())) {
+			cli_set_process_title("discordd: radio_worker --memory-copy");
+			$this->radio();
+			exit;	
+		}
 
 		if (!($eventHandlerPid = pcntl_fork())) {
 			cli_set_process_title(
 				sprintf(
-					"discordd: event_handler --pool --child=%s",
+					"discordd: event_handler",
 					__DISCORD_WORKERS
 				)
 			);

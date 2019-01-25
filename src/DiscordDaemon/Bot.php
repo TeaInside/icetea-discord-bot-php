@@ -134,7 +134,8 @@ final class Bot
 				// printf("Recieved a message from %s: %s\n", $message->author->username, json_encode(
 				// 	$text = $message->content
 				// ));
-				(new Response($discord, $message))->run();
+				$a = (new Response($discord, $message))->run();
+				var_dump($a);
 				// $pool->submit(new Response($discord, $message));
 			});
 		});

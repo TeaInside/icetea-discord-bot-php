@@ -126,6 +126,7 @@ final class Bot
 
 				$discord->on("message", function ($message) use ($discord, $pool) {
 						try {
+							(new Response($discord, $message))->run();
 							$pool->submit(new Response($discord, $message));
 						} catch (\Error $e) {
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());		

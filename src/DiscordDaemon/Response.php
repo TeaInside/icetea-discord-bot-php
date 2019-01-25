@@ -23,6 +23,7 @@ class Response extends Threaded
 	 */
 	public function __construct(Discord $discord, $message)
 	{
+		print "__construct\n";
 		$this->discord = $discord;
 		$this->message = $message;
 	}
@@ -32,6 +33,7 @@ class Response extends Threaded
 	 */
 	public function run(): void
 	{
+		var_dump("run");
 		$reply = null;
 
 		$guild_id = $this->message->channel->guild_id;
@@ -52,7 +54,7 @@ class Response extends Threaded
         		echo "The message was sent!", PHP_EOL;
     		})->otherwise(function ($e) {
         		echo "There was an error sending the message: {$e->getMessage()}", PHP_EOL;
-        		echo $e->getTraceAsString().PHP_EOL;
+        		echo $e->getTraceAsString() . PHP_EOL;
     		});	
 		}
 	}

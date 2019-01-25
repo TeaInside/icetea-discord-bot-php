@@ -118,30 +118,31 @@ final class Bot
 	 */
 	private function eventHandler(): void
 	{
-		$pool = new Pool(15);
-		$this->discord->on("ready", function ($discord) use ($pool) {
-			
-			printf("Bot is ready\n");
+		try {
+			$pool = new Pool(15);
+			$this->discord->on("ready", function ($discord) use ($pool) {
+				
+				printf("Bot is ready\n");
 
-			$discord->on("message", function ($message) use ($discord, $pool) {
-				try {
-					$guild_id = $message->channel->guild_id;
-					$channel_id = $message->channel_id;
-					$guild = $discord->guilds->get("id", $guild_id);
-					$channel = $guild->channels->get("id", $guild);
+				$discord->on("message", function ($message) use ($discord, $pool) {
 					
-					printf("Recieved a message from %s: %s\n", $message->author->username, json_encode(
-						$text = $this->message->content
-					));
-					print "submit\n";
-					$a = $pool->submit(new Response($discord, $message));	
-					var_dump($a);
-				} catch (\Error $e) {
-					var_dump($e->getMessage(), $e->getFile(), $e->getLine());
-				}
+						$guild_id = $message->channel->guild_id;
+						$channel_id = $message->channel_id;
+						$guild = $discord->guilds->get("id", $guild_id);
+						$channel = $guild->channels->get("id", $guild);
+						
+						printf("Recieved a message from %s: %s\n", $message->author->username, json_encode(
+							$text = $this->message->content
+						));
+						print "submit\n";
+						$a = $pool->submit(new Response($discord, $message));	
+						var_dump($a);
+				});
 			});
-		});
-		$this->discord->run();
+			$this->discord->run();
+		} catch (\Error $e) {
+			var_dump($e->getMessage(), $e->getFile(), $e->getLine());
+		}
 		return;
 	}
 

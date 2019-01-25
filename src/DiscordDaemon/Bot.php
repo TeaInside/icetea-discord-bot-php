@@ -2,6 +2,7 @@
 
 namespace DiscordDaemon;
 
+use Pool;
 use Discord\Discord;
 use Discord\WebSockets\Event;
 use Discord\Voice\VoiceClient;
@@ -120,7 +121,7 @@ final class Bot
 			
 			printf("Bot is ready\n");
 
-			$discord->on("message", function ($message) use ($discord, $pool) {
+			$discord->on("message", function ($message) use ($discord, $pool) 1{
 				$pool->submit(new Response($discord, $message));
 			});
 		});

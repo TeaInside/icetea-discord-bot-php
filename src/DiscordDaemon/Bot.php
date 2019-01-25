@@ -135,7 +135,7 @@ final class Bot
 						print "submit\n";
 						try {
 							(new Response($discord, $message))->run();
-							// print "meqwe\n";
+							print "meqwe\n";
 							// $pool->submit(new Response($discord, $message));
 							// var_dump($a);
 						} catch (\Error $e) {

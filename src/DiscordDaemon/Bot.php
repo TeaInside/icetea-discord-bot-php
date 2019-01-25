@@ -114,56 +114,17 @@ final class Bot
 	 */
 	private function eventHandler(): void
 	{
-		for ($i=__DISCORD_WORKERS + 1; $i--;) {
-			if ($i === 0) break;
-			if (!($pid = pcntl_fork())) {
-				unset($_SERVER, $_POST, $this->discord);
-				cli_set_process_title(
-					sprintf("discordd: event_handler %d", $i)
-				);
-				while(true) {
-					sleep(3600 * 24);
-				}
-				exit;
-			}
-		}
+		$pool = new Pool(15);
 
 		$this->discord->on("ready", function ($discord) {
 			
 			printf("Bot is ready\n");
 
-			$discord->on("message", function ($message) use ($discord) {
-
-				$reply = null;
-
-				$guild_id = $message->channel->guild_id;
-				$channel_id = $message->channel_id;
-				$guild = $this->discord->guilds->get("id", $guild_id);
-				$channel = $guild->channels->get("id", $guild);
-				
-				printf("Recieved a message from %s: %s\n", $message->author->username, json_encode(
-					$text = &$message->content
-				));
-
-				if (strtolower($text) === "ping") {
-					$reply = "Pong!";
-				}
-
-				if (isset($reply)) {
-					$channel->sendMessage($reply)->then(function ($message) {
-		        		echo "The message was sent!", PHP_EOL;
-		    		})->otherwise(function ($e) {
-		        		echo "There was an error sending the message: {$e->getMessage()}", PHP_EOL;
-		        		echo $e->getTraceAsString() . PHP_EOL;
-		    		});	
-				}
-
+			$discord->on("message", function ($message) use ($discord) use ($pool) {
+				$pool->submit(new Response($discord, $message));
 			});
 		});
 		$this->discord->run();
-
-
-
 		return;
 	}
 

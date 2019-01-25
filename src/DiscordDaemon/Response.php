@@ -41,7 +41,9 @@ class Response// extends Threaded
 		// $guild = $this->discord->guilds->get("id", $guild_id);
 		// $channel = $guild->channels->get("id", $guild);
 
-		$guild = $this->discord->guilds->first();
+		$guild = $this->message->channel->guild_id;
+		var_dump($guild);
+		var_dump($this->discord->guilds);
 		$channel = $guild->channels->getAll("type", "text")->first();
 		
 		printf("Recieved a message from %s: %s\n", $this->message->author->username, json_encode(

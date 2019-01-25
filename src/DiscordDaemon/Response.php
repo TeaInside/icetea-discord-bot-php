@@ -21,11 +21,11 @@ class Response extends Threaded
 	 *
 	 * Constructor.
 	 */
-	public function __construct(Discord $discord, $message)
+	public function __construct(/*Discord $discord, $message*/)
 	{
 		print "__construct\n";
-		$this->discord = $discord;
-		$this->message = $message;
+		/*$this->discord = $discord;
+		$this->message = $message;*/
 	}
 
 	/**

@@ -119,10 +119,10 @@ final class Bot
 			
 			printf("Bot is ready\n");
 
-			$pool = new Pool(15);
+			
 
-			$discord->on("message", function ($message) use ($discord, $pool) {
-
+			$discord->on("message", function ($message) use ($discord) {
+				$pool = new Pool(15);
 				$guild_id = $message->channel->guild_id;
 				$channel_id = $message->channel_id;
 				$guild = $discord->guilds->get("id", $guild_id);

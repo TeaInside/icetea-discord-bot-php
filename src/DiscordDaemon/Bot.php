@@ -124,7 +124,11 @@ final class Bot
 			printf("Bot is ready\n");
 
 			$discord->on("message", function ($message) use ($discord, $pool) {
-				$pool->submit(new Response($discord, $message));
+				try {
+					$pool->submit(new Response($discord, $message));	
+				} catch (\Error $e) {
+					var_dump($e->getMessage(), $e->getFile(), $e->getLine());
+				}
 			});
 		});
 		$this->discord->run();

@@ -128,7 +128,7 @@ final class Bot
 				$guild = $discord->guilds->get("id", $guild_id);
 				$channel = $guild->channels->get("id", $guild);
 				
-				printf("Recieved a message from %s: %s\n", $this->message->author->username, json_encode(
+				printf("Recieved a message from %s: %s\n", $message->author->username, json_encode(
 					$text = $message->content
 				));
 				$pool->submit(new Response($discord, $message));

@@ -118,29 +118,13 @@ final class Bot
 	 */
 	private function eventHandler(): void
 	{
-		$this->discord->on("ready", function ($discord) {
+		$pool = new Pool(15);
+		$this->discord->on("ready", function ($discord) use ($pool) {
 			
 			printf("Bot is ready\n");
 
-			
-
-			$discord->on("message", function ($message) use ($discord) {
-				//$pool = new Pool(15);
-				// $guild_id = $message->channel->guild_id;
-				// $channel_id = $message->channel_id;
-				// $guild = $discord->guilds->get("id", $guild_id);
-				// $channel = $guild->channels->get("id", $guild);
-				
-				// printf("Recieved a message from %s: %s\n", $message->author->username, json_encode(
-				// 	$text = $message->content
-				// ));
-				try {
-					$a = (new Response($discord, $message))->run();
-					var_dump($a);	
-				} catch (\Error $e) {
-					var_dump($e->getMessage(), $e->getFile(), $e->getLine());
-				}
-				// $pool->submit(new Response($discord, $message));
+			$discord->on("message", function ($message) use ($discord, $pool) {
+				$pool->submit(new Response($discord, $message));
 			});
 		});
 		$this->discord->run();

@@ -13,7 +13,7 @@ use Discord\Voice\VoiceClient;
  * @package \DiscordDaemon
  * @version 0.0.1
  */
-class Response// extends Threaded
+class Response extends Threaded
 {
 	/**
 	 * @param \Discord\Discord $discrod
@@ -40,7 +40,7 @@ class Response// extends Threaded
 		$channel = $guild->channels->get("id", $guild);
 		
 		printf("Recieved a message from %s: %s\n", $this->message->author->username, json_encode(
-			$text = $message->content
+			$text = $this->message->content
 		));
 
 		if (strtolower($text) === "ping") {

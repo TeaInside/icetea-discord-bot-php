@@ -119,18 +119,14 @@ final class Bot
 	private function eventHandler(): void
 	{
 		try {
-			$this->discord->on("ready", function ($discord) {
+			$pool = Pool(15);
+			$this->discord->on("ready", function ($discord) use ($pool) {
 				
 				printf("Bot is ready\n");
 
-				$discord->on("message", function ($message) use ($discord) {
-						// global $pool;
+				$discord->on("message", function ($message) use ($discord, $pool) {
 						try {
-						
-							(new Response($discord, $message))->run();
-							print "meqwe\n";
-							// $pool->submit(new Response($discord, $message));
-							// var_dump($a);
+							$pool->submit(new Response($discord, $message));
 						} catch (\Error $e) {
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());				
 						}

@@ -120,7 +120,7 @@ final class Bot
 			
 			printf("Bot is ready\n");
 
-			$discord->on("message", function ($message) use ($discord) use ($pool) {
+			$discord->on("message", function ($message) use ($discord, $pool) {
 				$pool->submit(new Response($discord, $message));
 			});
 		});

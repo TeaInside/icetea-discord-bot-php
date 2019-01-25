@@ -7,6 +7,8 @@ use Discord\Discord;
 use Discord\WebSockets\Event;
 use Discord\Voice\VoiceClient;
 
+$pool = new Pool(15);
+
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
  * @license MIT
@@ -119,13 +121,13 @@ final class Bot
 	private function eventHandler(): void
 	{
 		try {
-			$this->pool = new Pool(15);
 			$this->discord->on("ready", function ($discord) {
 				
 				printf("Bot is ready\n");
 
 				$discord->on("message", function ($message) use ($discord) {
-					
+						global $pool;
+
 						$guild_id = $message->channel->guild_id;
 						$channel_id = $message->channel_id;
 						$guild = $discord->guilds->get("id", $guild_id);
@@ -134,7 +136,9 @@ final class Bot
 						printf("Recieved a message from %s: %s\n", $message->author->username, json_encode($text = $message->content));
 						print "submit\n";
 						try {
-							$a = $this->pool->submit(new Response($discord, $message));
+
+							(new Response($discord, $message))->run();
+							$pool->submit(new Response($discord, $message));
 							var_dump($a);
 						} catch (\Error $e) {
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());				

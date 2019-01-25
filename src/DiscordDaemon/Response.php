@@ -2,7 +2,7 @@
 
 namespace DiscordDaemon;
 
-// use Threaded;
+use Threaded;
 use Discord\Discord;
 use Discord\WebSockets\Event;
 use Discord\Voice\VoiceClient;

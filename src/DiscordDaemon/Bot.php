@@ -138,6 +138,7 @@ final class Bot
 						try {
 
 							(new Response($discord, $message))->run();
+							print "meqwe\n";
 							$pool->submit(new Response($discord, $message));
 							var_dump($a);
 						} catch (\Error $e) {

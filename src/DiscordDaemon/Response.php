@@ -33,6 +33,7 @@ class Response extends Threaded
 	 */
 	public function run(): void
 	{
+		var_dump("run");
 		$reply = null;
 
 		$guild_id = $this->message->channel->guild_id;

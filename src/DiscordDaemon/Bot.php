@@ -49,6 +49,8 @@ final class Bot
 				__DISCORD_DAEMON_PID_FILE
 			)
 		);
+		$this->eventHandler();
+		sleep(1000 * 30);
 
 		// if (!($radioPid = pcntl_fork())) {
 		// 	cli_set_process_title("discordd: radio_worker --memory-copy");
@@ -123,14 +125,14 @@ final class Bot
 
 			$discord->on("message", function ($message) use ($discord) {
 				//$pool = new Pool(15);
-				$guild_id = $message->channel->guild_id;
-				$channel_id = $message->channel_id;
-				$guild = $discord->guilds->get("id", $guild_id);
-				$channel = $guild->channels->get("id", $guild);
+				// $guild_id = $message->channel->guild_id;
+				// $channel_id = $message->channel_id;
+				// $guild = $discord->guilds->get("id", $guild_id);
+				// $channel = $guild->channels->get("id", $guild);
 				
-				printf("Recieved a message from %s: %s\n", $message->author->username, json_encode(
-					$text = $message->content
-				));
+				// printf("Recieved a message from %s: %s\n", $message->author->username, json_encode(
+				// 	$text = $message->content
+				// ));
 				(new Response($discord, $message))->run();
 				// $pool->submit(new Response($discord, $message));
 			});

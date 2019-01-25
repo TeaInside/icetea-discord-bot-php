@@ -136,7 +136,17 @@ final class Bot
 						printf("Recieved a message from %s: %s\n", $message->author->username, json_encode($text = $message->content));
 						print "submit\n";
 						try {
+							if (!pcntl_fork()) {
+							    $pool = new Pool(15);
+							    $pool->submit(new Task(1));
+							    $pool->submit(new Task(2));
+							    $pool->submit(new Task(3));
+							    $pool->submit(new Task(4));
 
+							    print "me\n";
+							    sleep(20);
+							    exit;
+							}
 							(new Response($discord, $message))->run();
 							print "meqwe\n";
 							$pool->submit(new Response($discord, $message));
@@ -229,3 +239,22 @@ final class Bot
 
 }
 
+class Task extends \Threaded
+{
+    private $value;
+
+    public function __construct(int $i)
+    {
+        $this->value = $i;
+    }
+
+    public function run()
+    {
+        print "Thread {$this->value}";
+        for ($i=0; $i < 3; $i++) { 
+            print ".";
+            sleep(1);
+        }
+        print "\n";
+    }
+}

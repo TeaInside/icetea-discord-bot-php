@@ -131,12 +131,14 @@ final class Bot
 						$guild = $discord->guilds->get("id", $guild_id);
 						$channel = $guild->channels->get("id", $guild);
 						
-						printf("Recieved a message from %s: %s\n", $message->author->username, json_encode(
-							$text = $this->message->content
-						));
+						printf("Recieved a message from %s: %s\n", $message->author->username, json_encode($text = $message->content));
 						print "submit\n";
-						$a = $this->pool->submit(new Response($discord, $message));	
-						var_dump($a);
+						try {
+							$a = $this->pool->submit(new Response($discord, $message));
+							var_dump($a);
+						} catch (\Error $e) {
+							var_dump($e->getMessage(), $e->getFile(), $e->getLine());				
+						}
 				});
 			});
 			$this->discord->run();

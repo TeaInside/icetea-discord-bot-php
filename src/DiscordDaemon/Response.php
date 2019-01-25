@@ -23,6 +23,7 @@ class Response extends Threaded
 	 */
 	public function __construct(Discord $discord, $message)
 	{
+		var_dump(123123);
 		$this->discord = $discord;
 		$this->message = $message;
 	}

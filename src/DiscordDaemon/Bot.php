@@ -119,7 +119,7 @@ final class Bot
 	private function eventHandler(): void
 	{
 		try {
-			$pool = new Pool(15);
+			$this->pool = new Pool(15);
 			$this->discord->on("ready", function ($discord) use ($pool) {
 				
 				printf("Bot is ready\n");
@@ -135,7 +135,7 @@ final class Bot
 							$text = $this->message->content
 						));
 						print "submit\n";
-						$a = $pool->submit(new Response($discord, $message));	
+						$a = $this->pool->submit(new Response($discord, $message));	
 						var_dump($a);
 				});
 			});

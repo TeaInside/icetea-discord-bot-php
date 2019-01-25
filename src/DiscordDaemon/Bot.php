@@ -49,6 +49,7 @@ final class Bot
 				__DISCORD_DAEMON_PID_FILE
 			)
 		);
+		$this->init([]);
 		$this->eventHandler();
 		sleep(1000 * 30);
 

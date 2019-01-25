@@ -122,7 +122,7 @@ final class Bot
 			
 
 			$discord->on("message", function ($message) use ($discord) {
-				$pool = new Pool(15);
+				//$pool = new Pool(15);
 				$guild_id = $message->channel->guild_id;
 				$channel_id = $message->channel_id;
 				$guild = $discord->guilds->get("id", $guild_id);
@@ -131,7 +131,8 @@ final class Bot
 				printf("Recieved a message from %s: %s\n", $message->author->username, json_encode(
 					$text = $message->content
 				));
-				$pool->submit(new Response($discord, $message));
+				(new Response($discord, $message))->run();
+				// $pool->submit(new Response($discord, $message));
 			});
 		});
 		$this->discord->run();

@@ -2,7 +2,7 @@
 
 namespace DiscordDaemon;
 
-use Threaded;
+//use Threaded;
 use Discord\Discord;
 use Discord\WebSockets\Event;
 use Discord\Voice\VoiceClient;
@@ -13,7 +13,7 @@ use Discord\Voice\VoiceClient;
  * @package \DiscordDaemon
  * @version 0.0.1
  */
-class Response extends Threaded
+class Response// extends Threaded
 {
 	/**
 	 * @param \Discord\Discord $discrod
@@ -21,11 +21,11 @@ class Response extends Threaded
 	 *
 	 * Constructor.
 	 */
-	public function __construct(/*Discord $discord, $message*/)
+	public function __construct(Discord $discord, $message)
 	{
 		print "__construct\n";
-		/*$this->discord = $discord;
-		$this->message = $message;*/
+		$this->discord = $discord;
+		$this->message = $message;
 	}
 
 	/**

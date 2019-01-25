@@ -23,7 +23,7 @@ class Response// extends Threaded
 	 */
 	public function __construct(Discord $discord, $message)
 	{
-		var_dump(123123);
+		print "__construct\n";
 		$this->discord = $discord;
 		$this->message = $message;
 	}
@@ -36,10 +36,13 @@ class Response// extends Threaded
 		var_dump("run");
 		$reply = null;
 
-		$guild_id = $this->message->channel->guild_id;
-		$channel_id = $this->message->channel_id;
-		$guild = $this->discord->guilds->get("id", $guild_id);
-		$channel = $guild->channels->get("id", $guild);
+		// $guild_id = $this->message->channel->guild_id;
+		// $channel_id = $this->message->channel_id;
+		// $guild = $this->discord->guilds->get("id", $guild_id);
+		// $channel = $guild->channels->get("id", $guild);
+
+		$guild = $this->discord->guilds->first();
+		$channel = $guild->channels->getAll("type", "text")->first();
 		
 		printf("Recieved a message from %s: %s\n", $this->message->author->username, json_encode(
 			$text = $this->message->content

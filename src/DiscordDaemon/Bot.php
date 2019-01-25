@@ -126,13 +126,6 @@ final class Bot
 				$discord->on("message", function ($message) use ($discord) {
 						// global $pool;
 						try {
-							$guild_id = $message->channel->guild_id;
-							$channel_id = $message->channel_id;
-							$guild = $discord->guilds->get("id", $guild_id);
-							$channel = $guild->channels->get("id", $guild);
-							
-							printf("Recieved a message from %s: %s\n", $message->author->username, json_encode($text = $message->content));
-							print "submit\n";
 						
 							(new Response($discord, $message))->run();
 							print "meqwe\n";

@@ -10,4 +10,6 @@ if (!function_exists("\\Sodium\\crypto_secretbox")) {
 declare(ticks=1);
 pcntl_signal(SIGCHLD, SIG_IGN);
 
-(new DiscordDaemon\Bot)->run();
+$bot = new DiscordDaemon\Bot;
+$bot->start();
+$bot->join();

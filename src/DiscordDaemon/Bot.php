@@ -3,6 +3,7 @@
 namespace DiscordDaemon;
 
 use Pool;
+use Thread;
 use Discord\Discord;
 use Discord\WebSockets\Event;
 use Discord\Voice\VoiceClient;
@@ -13,25 +14,12 @@ use Discord\Voice\VoiceClient;
  * @package \DiscordDaemon
  * @version 0.0.1
  */
-final class Bot
+final class Bot extends Thread
 {
 	/**
 	 * @var \Discord\Discord
 	 */	
 	private $discord;
-
-	/**
-	 * Constructor.
-	 */
-	public function __construct()
-	{
-		foreach($GLOBALS as $k => &$v) { 
-			if ($k != "GLOBALS") {
-				unset($GLOBALS[$k]); 
-			}
-		}
-		unset($GLOBALS, $k, $v);
-	}
 
 	/**
 	 * @param array $opt
@@ -109,7 +97,10 @@ mdd1:
 						if (!($pid = pcntl_fork())) {
 							cli_set_process_title(sprintf("discordd: streamer --file=%s --no-ff", $file));
 							$this->init();
-							(new Radio($this->discord))->dispatch($v["guild_id"], $v["channel_id"], $file);
+							$radio = new Radio($this->discord);
+							$radio->setData($v["guild_id"], $v["channel_id"], $file);
+							$radio->run();
+							$radio->join();
 							exit;
 						}
 						pcntl_waitpid($pid, $status, WUNTRACED);

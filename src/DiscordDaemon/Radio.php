@@ -19,6 +19,21 @@ class Radio
 	private $vc;
 
 	/**
+	 * @var string
+	 */
+	private $guild_id;
+
+	/**
+	 * @var string
+	 */
+	private $channel_id;
+
+	/**
+	 * @var string
+	 */
+	private $file;
+
+	/**
 	 * @param Discord\Discord $discord
 	 *
 	 * Constructor.
@@ -34,8 +49,22 @@ class Radio
 	 * @param string &$file
 	 * @return void
 	 */
-	public function dispatch(string &$guild_id, string &$channel_id, string &$file): void
+	public function setData(string &$guild_id, string &$channel_id, string &$file): void
 	{
+		$this->guild_id = &$guild_id;
+		$this->channel_id = &$channel_id;
+		$this->file = &$file;
+	}
+
+	/**
+	 * @return void
+	 */
+	public function run(): void
+	{
+		$guild_id = &$this->guild_id;
+		$channel_id = &$this->channel_id;
+		$file = &$this->$file;
+
 		$this->discord->on("ready", function ($discord) use (&$guild_id, &$channel_id, &$file) {
 			printf("Radio is ready!\n");			
 

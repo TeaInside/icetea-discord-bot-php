@@ -25,6 +25,12 @@ final class Bot
 	 */
 	public function __construct()
 	{
+		foreach($GLOBALS as $k => &$v) { 
+			if ($k != "GLOBALS") {
+				unset($GLOBALS[$k]); 
+			}
+		}
+		unset($GLOBALS, $k, $v);
 	}
 
 	/**
@@ -101,14 +107,13 @@ mdd1:
 					foreach ($playList as &$file) {
 						$this->discord = null;
 						if (!($pid = pcntl_fork())) {
-							cli_set_process_title(sprintf("discordd: radio --player --file=%s", $file));
-							$this->init([]);
+							cli_set_process_title(sprintf("discordd: streamer --file=%s --no-ff", $file));
+							$this->init();
 							(new Radio($this->discord))->dispatch($v["guild_id"], $v["channel_id"], $file);
 							exit;
 						}
 						pcntl_waitpid($pid, $status, WUNTRACED);
-						print shell_exec(__KILL_DCA);
-
+						printf("%s", shell_exec(__KILL_DCA));
 					}
 					goto mdd1;
 				}
@@ -126,7 +131,6 @@ mdd1:
 	private function eventHandler(): void
 	{
 		try {
-			// $pool = new Pool(15);
 			$this->discord->on("ready", function ($discord) use ($pool) {
 				
 				printf("Bot is ready\n");
@@ -134,91 +138,17 @@ mdd1:
 				$discord->on("message", function ($message) use ($discord, $pool) {
 						try {
 							(new Response($discord, $message))->run();
-							// $pool->submit(new Response($discord, $message));
 						} catch (\Error $e) {
+							printf("\n\nAn error occured!\n");
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());		
 						}
 				});
 			});
 			$this->discord->run();
 		} catch (\Error $e) {
+			printf("\n\nAn error occured!\n");
 			var_dump($e->getMessage(), $e->getFile(), $e->getLine());
 		}
 		return;
 	}
-
-	// /**
-	//  * @return void
-	//  */
-	// public function worker(): void
-	// {
-	// 	$pids = [];
-	// 	for ($i=__DISCORD_WORKERS; $i--;) { 
-	// 		if (!($pid = pcntl_fork())) {
-					
-	// 			exit;
-	// 		}
-	// 		$pids[] = $pid;
-	// 	}
-	// }
-
-	// /**
-	//  * @return void
-	//  */
-	// public function _run()
-	// {
-	// 	$pidFile = __DIR__."/discordd.pid";
-
-	// 	file_put_contents($pidFile, getmypid());
-	// 	cli_set_process_title("discordd --daemonize --pid_file={$pidFile} --pool");
-
-	// 	$this->discord->on("ready", function (&$discord) {
-			
-	// 		printf("Bot is ready\n");
-
-
-	// 		$guild_id = $message->channel->guild_id;
-	// 		$channel_id = $message->channel_id;
-	// 		$guild = $this->discord->guilds->get("id", $guild_id);
-	// 		$channel = $guild->channels->get("id", $guild);
-
-
-	// 		print "A11\n";
-	// 		$discord->joinVoiceChannel($channel, false, false, null)->then(function (VoiceClient $vc) {
-			    
-	// 		    echo "Joined voice channel.\r\n";
-	// 		    $vc->playFile(__DIR__."/me.mp3")->otherwise(function($e){ 
-	// 		    	echo "ERR: ".$e->getMessage(); 
-	// 		    });
-
-	// 		}, function ($e) {
-	// 		    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
-	// 		});
-	// 		print "A12\n";
-
-
-
-	// 		// /**
-	// 		//  * On message event.
-	// 		//  */
-	// 		// $discord->on("message", function (&$message) use (&$discord) {
-
-				
-
-
-	// 		// 	// $response = new Response($discord);
-	// 		// 	// $response->onMessage($message);
-
-	// 		// 	// $response = null;
-	// 		// 	// unset($response, $message);
-
-	// 		// 	return;
-	// 		// });
-
-
-	// 	});
-
-	// 	$this->discord->run();
-	// }
-
 }

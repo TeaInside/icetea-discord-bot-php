@@ -12,10 +12,14 @@ trait ResponseRoutes
 {
 	/**
 	 * @param string $text
-	 * @param 
+	 * @param $guild
+	 * @param $channel
+	 * @return mixed
 	 */
-	private function getResponse()
+	private function getResponse(string $text, $guild, $channel)
 	{
-
+		if (preg_match("/^[\/\.\!\~]?ping$/i", $text)) {
+			return "Pong!";
+		}
 	}
 }

@@ -61,6 +61,7 @@ class Radio
 	 */
 	public function run(): void
 	{
+		clld();
 		$guild_id = &$this->guild_id;
 		$channel_id = &$this->channel_id;
 		$file = &$this->$file;

@@ -1,6 +1,10 @@
 <?php
 
-require __DIR__."/vendor/autoload.php";
+function clld() {
+	require_once __DIR__."/vendor/autoload.php";
+}
+
+clld();
 require __DIR__."/config.php";
 
 if (!function_exists("\\Sodium\\crypto_secretbox")) {

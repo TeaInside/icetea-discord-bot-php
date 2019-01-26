@@ -36,6 +36,7 @@ final class Bot extends Thread
 	 */
 	public function run(): void
 	{
+		clld();
 		file_put_contents(__DISCORD_DAEMON_PID_FILE, getmypid());
 		cli_set_process_title(
 			sprintf(

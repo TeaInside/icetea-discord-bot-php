@@ -31,11 +31,12 @@ class Radio
 	/**
 	 * @param string &$guild_id
 	 * @param string &$channel_id
+	 * @param string &$file
 	 * @return void
 	 */
-	public function dispatch(string &$guild_id, string &$channel_id): void
+	public function dispatch(string &$guild_id, string &$channel_id, string &$file): void
 	{
-		$this->discord->on("ready", function ($discord) use (&$guild_id, &$channel_id) {
+		$this->discord->on("ready", function ($discord) use (&$guild_id, &$channel_id, &$file) {
 			printf("Radio is ready!\n");			
 
 			// Prepare radio
@@ -55,57 +56,70 @@ class Radio
 					/**
 					 * Promise resolved.
 					 */
-					function (VoiceClient $vc) {
+					function (VoiceClient $vc) use (&$file) {
 					    printf("[radio] Joined voice channel...\n");
-					    
-					    $it = 0;
-					    do {
+
+					    $vc->setBitrate(128000)->then(
+				    		function () use ($vc, &$file) {
+					    		$vc->playFile($file)->otherwise(function($e){ 
+					    			printf("Error: %s\n", $e->getMessage());
+					    		})->then(function () {
+					    			exit;
+					    		});
+				    		}
+				    	)->otherwise(function($e){ 
+				    		printf("Error: %s\n", $e->getMessage());
+				    	});
+
+
+					    // $it = 0;
+					    // do {
 					    	
-					    	if ($it > 0) {
-					    		printf("Sleeping for 60 seconds...");
-					    		sleep(60);
-					    	}
+					    // 	if ($it > 0) {
+					    // 		printf("Sleeping for 60 seconds...");
+					    // 		sleep(60);
+					    // 	}
 
-					    	$playList = glob(sprintf(
-						    	"%s/*.mp3",
-						    	__DISCORD_RADIO_PLAYLIST_DIR
-						    ));
+					    // 	$playList = glob(sprintf(
+						   //  	"%s/*.mp3",
+						   //  	__DISCORD_RADIO_PLAYLIST_DIR
+						   //  ));
 
-						    $c = count($playList);
+						   //  $c = count($playList);
 
-						    if ($c === 0) {
-					    		printf("Empty playlist\n");
-					    	}
+						   //  if ($c === 0) {
+					    // 		printf("Empty playlist\n");
+					    // 	}
 
-					    } while ($c === 0);
+					    // } while ($c === 0);
 
-					    $i = 0;
-					    shuffle($playList);
+					    // $i = 0;
+					    // shuffle($playList);
 
-					    printf("Got %d playlist!\n", $c);
+					    // printf("Got %d playlist!\n", $c);
 
-					    $loopSong = function () use (&$loopSong, &$playList, &$i, $vc, &$c) {
-					    	$vc->setBitrate(128000)->then(
-					    		function () use (&$loopSong, &$playList, &$i, $vc, &$c) {
-					    			$qq = cli_set_process_title(
-					    				sprintf(
-					    					"discordd: radio --player --file=%s", 
-					    					$playList[$i % $c]
-					    				)
-					    			);
-					    			printf("[radio] Playing %s...; offset %d\n", $playList[$i % $c], $i % $c);
-						    		$vc->playFile($playList[$i++ % $c])
-							    		->then($loopSong)
-								    	->otherwise(function($e){ 
-								    		printf("Error: %s\n", $e->getMessage());
-								    	});
-					    		}
-					    	)->otherwise(function($e){ 
-					    		printf("Error: %s\n", $e->getMessage());
-					    	});
-					    };
+					    // $loopSong = function () use (&$loopSong, &$playList, &$i, $vc, &$c) {
+					    // 	$vc->setBitrate(128000)->then(
+					    // 		function () use (&$loopSong, &$playList, &$i, $vc, &$c) {
+					    // 			$qq = cli_set_process_title(
+					    // 				sprintf(
+					    // 					"discordd: radio --player --file=%s", 
+					    // 					$playList[$i % $c]
+					    // 				)
+					    // 			);
+					    // 			printf("[radio] Playing %s...; offset %d\n", $playList[$i % $c], $i % $c);
+						   //  		$vc->playFile($playList[$i++ % $c])
+							  //   		->then($loopSong)
+								 //    	->otherwise(function($e){ 
+								 //    		printf("Error: %s\n", $e->getMessage());
+								 //    	});
+					    // 		}
+					    // 	)->otherwise(function($e){ 
+					    // 		printf("Error: %s\n", $e->getMessage());
+					    // 	});
+					    // };
 
-					    $loopSong();
+					    // $loopSong();
 					},
 
 					/**

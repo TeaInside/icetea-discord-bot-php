@@ -31,7 +31,7 @@ final class Bot
 	 * @param array $opt
 	 * @return void
 	 */
-	public function init(array $opt): void
+	public function init(array $opt = []): void
 	{
 		$opt["token"] = __DISCORD_BOT_TOKEN;
 		$this->discord = new Discord($opt);
@@ -83,7 +83,7 @@ final class Bot
 		foreach (__DISCORD_RADIO_STREAM_TARGET as $v) {
 			if (!(pcntl_fork())) {
 				if (isset($v["guild_id"], $v["channel_id"])) {
-					$this->discord = null;
+
 					cli_set_process_title(
 						sprintf(
 							"discordd: radio --channel_id=%s --guild_id=%s --playlist_dir=%s --loop --daemonize",
@@ -92,15 +92,21 @@ final class Bot
 							__DISCORD_RADIO_PLAYLIST_DIR
 						)
 					);
-					if (!pcntl_fork()) {
-						cli_set_process_title(sprintf("discordd: radio --player"));
-						$this->init([
-							// "disabledEvents" => [Event::TYPING_START, Event::VOICE_STATE_UPDATE, Event::VOICE_SERVER_UPDATE, Event::GUILD_CREATE, Event::GUILD_DELETE, Event::GUILD_UPDATE, Event::CHANNEL_CREATE, Event::CHANNEL_UPDATE, Event::CHANNEL_DELETE, Event::GUILD_BAN_ADD, Event::GUILD_BAN_REMOVE, Event::MESSAGE_CREATE, Event::MESSAGE_DELETE, Event::MESSAGE_DELETE_BULK, Event::MESSAGE_UPDATE, Event::GUILD_MEMBER_ADD, Event::GUILD_MEMBER_REMOVE, Event::GUILD_MEMBER_UPDATE, Event::GUILD_ROLE_CREATE, Event::GUILD_ROLE_DELETE, Event::GUILD_ROLE_UPDATE]
-						]);
-						(new Radio($this->discord))->dispatch($v["guild_id"], $v["channel_id"]);
-						exit;
+
+					$playList = glob(sprintf(
+						"%s/*.mp3",
+				    	__DISCORD_RADIO_PLAYLIST_DIR
+				    ));
+					foreach ($playList as &$file) {
+						$this->discord = null;
+						if (!($pid = pcntl_fork())) {
+							cli_set_process_title(sprintf("discordd: radio --player --file=%s", $file));
+							$this->init([]);
+							(new Radio($this->discord))->dispatch($v["guild_id"], $v["channel_id"], $file);
+							exit;
+						}
+						pcntl_waitpid($pid, $status, WUNTRACED);
 					}
-					pcntl_wait($status);
 				}
 
 				exit;

@@ -92,11 +92,12 @@ final class Bot
 							__DISCORD_RADIO_PLAYLIST_DIR
 						)
 					);
-
+mdd1:
 					$playList = glob(sprintf(
 						"%s/*.mp3",
 				    	__DISCORD_RADIO_PLAYLIST_DIR
 				    ));
+					shuffle($playList);
 					foreach ($playList as &$file) {
 						$this->discord = null;
 						if (!($pid = pcntl_fork())) {
@@ -106,7 +107,10 @@ final class Bot
 							exit;
 						}
 						pcntl_waitpid($pid, $status, WUNTRACED);
+						print shell_exec(__KILL_DCA);
+
 					}
+					goto mdd1;
 				}
 
 				exit;

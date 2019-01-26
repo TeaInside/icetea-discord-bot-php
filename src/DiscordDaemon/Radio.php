@@ -61,7 +61,7 @@ class Radio
 	 */
 	public function run(): void
 	{
-		clld();
+		require_once __DIR__."/../../vendor/autoload.php";
 		$guild_id = &$this->guild_id;
 		$channel_id = &$this->channel_id;
 		$file = &$this->$file;

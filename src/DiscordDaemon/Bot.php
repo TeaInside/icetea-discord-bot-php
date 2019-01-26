@@ -27,6 +27,7 @@ final class Bot extends Thread
 	 */
 	public function init(array $opt = []): void
 	{
+		require_once __DIR__."/../../vendor/autoload.php";
 		$opt["token"] = __DISCORD_BOT_TOKEN;
 		$this->discord = new Discord($opt);
 	}
@@ -36,7 +37,6 @@ final class Bot extends Thread
 	 */
 	public function run(): void
 	{
-		clld();
 		file_put_contents(__DISCORD_DAEMON_PID_FILE, getmypid());
 		cli_set_process_title(
 			sprintf(

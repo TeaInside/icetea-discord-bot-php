@@ -58,7 +58,7 @@ class Radio
 					 */
 					function (VoiceClient $vc) use (&$file) {
 					    printf("[radio] Joined voice channel...\n");
-
+					    printf("[radio] Playing %s...\n", $file);
 					    $vc->setBitrate(128000)->then(
 				    		function () use ($vc, &$file) {
 					    		$vc->playFile($file)->otherwise(function($e){ 

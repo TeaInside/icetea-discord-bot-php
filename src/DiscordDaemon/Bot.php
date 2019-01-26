@@ -3,7 +3,6 @@
 namespace DiscordDaemon;
 
 use Pool;
-use Thread;
 use Discord\Discord;
 use Discord\WebSockets\Event;
 use Discord\Voice\VoiceClient;
@@ -14,7 +13,7 @@ use Discord\Voice\VoiceClient;
  * @package \DiscordDaemon
  * @version 0.0.1
  */
-final class Bot extends Thread
+final class Bot
 {
 	/**
 	 * @var \Discord\Discord
@@ -27,7 +26,6 @@ final class Bot extends Thread
 	 */
 	public function init(array $opt = []): void
 	{
-		require_once __DIR__."/../../vendor/autoload.php";
 		$opt["token"] = __DISCORD_BOT_TOKEN;
 		$this->discord = new Discord($opt);
 	}
@@ -98,10 +96,7 @@ mdd1:
 						if (!($pid = pcntl_fork())) {
 							cli_set_process_title(sprintf("discordd: streamer --file=%s --no-ff", $file));
 							$this->init();
-							$radio = new Radio($this->discord);
-							$radio->setData($v["guild_id"], $v["channel_id"], $file);
-							$radio->run();
-							$radio->join();
+							(new Radio($this->discord))->dispatch($v["guild_id"], $v["channel_id"], $file);
 							exit;
 						}
 						pcntl_waitpid($pid, $status, WUNTRACED);

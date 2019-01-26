@@ -1,10 +1,6 @@
 <?php
 
-function clld() {
-	require_once __DIR__."/vendor/autoload.php";
-}
-
-clld();
+require __DIR__."/vendor/autoload.php";
 require __DIR__."/config.php";
 
 if (!function_exists("\\Sodium\\crypto_secretbox")) {
@@ -14,6 +10,4 @@ if (!function_exists("\\Sodium\\crypto_secretbox")) {
 declare(ticks=1);
 pcntl_signal(SIGCHLD, SIG_IGN);
 
-$bot = new DiscordDaemon\Bot;
-$bot->start();
-$bot->join();
+(new DiscordDaemon\Bot)->run();

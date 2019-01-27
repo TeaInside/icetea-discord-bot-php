@@ -31,34 +31,31 @@ class Response
 	 */
 	public function run(): void
 	{
-		var_dump("memory", $this->message->author->username, $this->message->author->user->username, $this->message->content, isset($this->message->author->username, $this->message->content));
-		if (isset($this->message->author->username, $this->message->content)) {
-			$reply = null;
+		$reply = null;
 
-			$guild_id = $this->message->channel->guild_id;
-			$channel_id = $this->message->channel_id;
-			$guild = $this->discord->guilds->get("id", $guild_id);
-			$channel = $guild->channels->get("id", $channel_id);
-			
-			printf(
-				"Recieved a message from %s: %s\n", 
-				$this->message->author->username, 
-				json_encode(
-					$text = $this->message->content,
-					JSON_UNESCAPED_SLASHES
-				)
-			);
+		$guild_id = $this->message->channel->guild_id;
+		$channel_id = $this->message->channel_id;
+		$guild = $this->discord->guilds->get("id", $guild_id);
+		$channel = $guild->channels->get("id", $channel_id);
+		
+		printf(
+			"Recieved a message from %s: %s\n", 
+			$this->message->author->username, 
+			json_encode(
+				$text = $this->message->content,
+				JSON_UNESCAPED_SLASHES
+			)
+		);
 
-			$reply = $this->getResponse($text, $guild, $channel, $this->message);
+		$reply = $this->getResponse($text, $guild, $channel, $this->message);
 
-			if (isset($reply)) {
-				$channel->sendMessage($reply)->then(function ($message) {
-	        		printf("The message was sent!");
-	    		})->otherwise(function ($e) {
-	    			printf("There was an error sending the message: %s\n", $e->getMessage());
-	    			printf("%s\n", $e->getTraceAsString());
-	    		});	
-			}
+		if (isset($reply)) {
+			$channel->sendMessage($reply)->then(function ($message) {
+        		printf("The message was sent!");
+    		})->otherwise(function ($e) {
+    			printf("There was an error sending the message: %s\n", $e->getMessage());
+    			printf("%s\n", $e->getTraceAsString());
+    		});	
 		}
 	}
 }

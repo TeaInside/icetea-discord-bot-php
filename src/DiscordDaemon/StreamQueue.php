@@ -111,52 +111,55 @@ class StreamQueue
 								    if (is_string($file)) {
 								    	var_dump($file);
 								    	$file = STORAGE_PATH."/mp3/{$file}";
-								    	if (!pcntl_fork()) {
-								    		printf("[StreamQueue] initd\n");
-								    		$this->bot->discord->init();
-								    		$this->bot->discord->on("ready", function ($discord) use (&$guild_id, &$channel_id, &$file) {
-												printf("[StreamQueue] Streaming is ready!\n");
-												$guild = $discord->guilds->get("id", $guild_id);
-												$channel = $guild->channels->getAll("type", "voice")->first();
-												$discord->joinVoiceChannel($voiceChannel, false, false, null)->then(
-													function (VoiceClient $vc) use (&$file) {
-													    printf("[StreamQueue] Joined voice channel...\n");
-													    printf("[StreamQueue] Playing %s...\n", $file);
-													    $vc->setBitrate(128000)->then(
-												    		function () use ($vc, &$file) {
-													    		$vc->playFile($file)->otherwise(function($e){ 
-													    			printf("Error: %s\n", $e->getMessage());
-													    			exit;
-													    		})->then(function () {
-													    			exit;
-													    		});
-												    		}
-												    	)->otherwise(function($e){ 
-												    		printf("Error: %s\n", $e->getMessage());
-												    		exit;
-												    	});
-													},
+								    	var_dump($file);
+								    	var_dump("wmm");
+								    	sleep(100);
+								   //  	if (!pcntl_fork()) {
+								   //  		printf("[StreamQueue] initd\n");
+								   //  		$this->bot->discord->init();
+								   //  		$this->bot->discord->on("ready", function ($discord) use (&$guild_id, &$channel_id, &$file) {
+											// 	printf("[StreamQueue] Streaming is ready!\n");
+											// 	$guild = $discord->guilds->get("id", $guild_id);
+											// 	$channel = $guild->channels->getAll("type", "voice")->first();
+											// 	$discord->joinVoiceChannel($voiceChannel, false, false, null)->then(
+											// 		function (VoiceClient $vc) use (&$file) {
+											// 		    printf("[StreamQueue] Joined voice channel...\n");
+											// 		    printf("[StreamQueue] Playing %s...\n", $file);
+											// 		    $vc->setBitrate(128000)->then(
+											// 	    		function () use ($vc, &$file) {
+											// 		    		$vc->playFile($file)->otherwise(function($e){ 
+											// 		    			printf("Error: %s\n", $e->getMessage());
+											// 		    			exit;
+											// 		    		})->then(function () {
+											// 		    			exit;
+											// 		    		});
+											// 	    		}
+											// 	    	)->otherwise(function($e){ 
+											// 	    		printf("Error: %s\n", $e->getMessage());
+											// 	    		exit;
+											// 	    	});
+											// 		},
 
-													function ($e) {
-												    	printf(
-												    		"There was an error joining the voice channel: %s\n",
-												    		$e->getMessage()
-												    	); 
-													}
-												)->otherwise(
-													function ($e) {
-												    	printf(
-												    		"There was an error joining the voice channel: %s\n",
-												    		$e->getMessage()
-												    	); 
-													}
-												);
-											});
-											$this->bot->discord->run();
-								    		exit;
-								    	}
-								    	pcntl_wait($status);
-								    }
+											// 		function ($e) {
+											// 	    	printf(
+											// 	    		"There was an error joining the voice channel: %s\n",
+											// 	    		$e->getMessage()
+											// 	    	); 
+											// 		}
+											// 	)->otherwise(
+											// 		function ($e) {
+											// 	    	printf(
+											// 	    		"There was an error joining the voice channel: %s\n",
+											// 	    		$e->getMessage()
+											// 	    	); 
+											// 		}
+											// 	);
+											// });
+											// $this->bot->discord->run();
+								   //  		exit;
+								   //  	}
+								   //  	pcntl_wait($status);
+								   //  }
 								    exit;
 								})->otherwise(function ($e) {
 								    printf("There was an error sending the message: %s\n", $e->getMessage());

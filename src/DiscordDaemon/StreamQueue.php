@@ -92,21 +92,24 @@ class StreamQueue
 						shmop_close($shmid);
 						printf("Download success!\n");
 						$i = strpos($fileName, "\0");
-						if ($i === false) {
-							return $fileName;
+						if ($i !== false) {
+							$fileName = substr($fileName, 0, $i);	
 						}
 
-						$fileName =  substr($fileName, 0, $i);
-						
-						$channel->sendMessage(sprintf("\"%s\" has been downloaded (%s).", $st, $fileName))->then(
-							function () {
-								printf("The message was sent!\n");
-							}
-						)->otherwise(
-							function ($e) {
-								printf("There was an error sending the message: %s\n", $e->getMessage());
-							}
-						);
+						try {
+							$channel->sendMessage(sprintf("\"%s\" has been downloaded (%s).", $st, $fileName))->then(
+								function () {
+									printf("The message was sent!\n");
+								}
+							)->otherwise(
+								function ($e) {
+									printf("There was an error sending the message: %s\n", $e->getMessage());
+								}
+							);	
+						} catch (\Error $e) {
+							printf("\n\nAn error occured!\n");
+							var_dump($e->getMessage(), $e->getFile(), $e->getLine());
+						}
 
 						exit;
 					};

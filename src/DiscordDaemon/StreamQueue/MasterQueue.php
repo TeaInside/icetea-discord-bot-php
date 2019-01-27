@@ -73,18 +73,31 @@ class MasterQueue
 	}
 
 	/**
+	 * @return string
+	 */
+	public function dequeue(): string
+	{
+		if (isset($this->queue[0])) {
+			$r = $this->queue[0];
+			unset($this->queue[0]);
+			$this->queue = array_values($this->queue);
+			return $r;
+		}
+		return "";
+	}
+
+	/**
 	 * Destructor.
 	 */
 	public function __destruct()
 	{
-		var_dump($this->queue);
 		file_put_contents($this->queueFile, json_encode($this->queue));
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getQueue(): array
+	public function &getQueue(): array
 	{
 		return $this->queue;
 	}

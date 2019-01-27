@@ -29,13 +29,13 @@ trait ResponseRoutes
 
 		if (preg_match("/^[\/\.\!\~]?vq$/USsi", $text)) {
 			$st = new MasterQueue($message->channel->guild_id);
-			$st = $st->getQueue();
+			$st = &$st->getQueue();
 			if (!$st) {
 				return "Queue is empty.";
 			}
-			$r = "";
-			foreach ($st as $k => $st) {
-				$r .= "{$k}. {$st}\n";
+			$r = "Queues:\n\n";
+			foreach ($st as $k => &$queue) {
+				$r .= "{$k}. {$queue}\n";
 			}
 
 			return trim($r);

@@ -89,7 +89,7 @@ class StreamQueue
 
 					$notify = function ($file) use (&$st, &$guild_id) {
 						 printf("Sending notification...\n");
-						 if (!pcntl_fork()) {
+						 // if (!pcntl_fork()) {
 					    	$this->bot->init();
 							$this->bot->discord->on("ready", function ($discord) use (&$st, &$file, &$guild_id) {
 
@@ -110,14 +110,14 @@ class StreamQueue
 								var_dump($voiceChannel);
 								$channel->sendMessage($r)->then(function ($message) use ($file) {
 								    printf("The message was sent ~!\n");
-								})->otherwise(function ($e) {''
+								})->otherwise(function ($e) {
 								    printf("There was an error sending the message: %s\n", $e->getMessage());
 								});
 							});
 							$this->bot->discord->run();
 							var_dump("memset 2ddd");
 							exit;
-					    }
+					    // }
 					};
 
 					$channel->sendMessage($r)->then(function ($message) use ($act, $channel, $notify) {

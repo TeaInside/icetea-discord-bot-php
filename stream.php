@@ -25,7 +25,7 @@ if (isset($argv[1])):
 			$guild = $discord->guilds->get("id", $argv["guild_id"]);
 			$channel = $guild->channels->getAll("type", 2)->first();
 
-			$discord->joinVoiceChannel($channel)->then(
+			$discord->joinVoiceChannel($channel, false, false, null)->then(
 				function (\Discord\Voice\VoiceClient $vc) use (&$argv) {
 				    $vc->setBitrate(128000)->then(
 			    		function () use ($vc, &$argv) {

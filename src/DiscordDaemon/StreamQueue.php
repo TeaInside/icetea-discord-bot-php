@@ -42,8 +42,8 @@ class StreamQueue
 				$this->dispatch($v);
 			}
 			unset($guildList);
-			printf("[StreamQueue] Sleeping for 10 seconds");
-			for ($i=0; $i < 3; $i++) {
+			printf("[StreamQueue] Sleeping for 5 seconds");
+			for ($i=0; $i < 5; $i++) {
 				sleep(1);
 				printf(".");
 			}

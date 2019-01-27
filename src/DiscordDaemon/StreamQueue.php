@@ -70,7 +70,7 @@ class StreamQueue
 					$r = sprintf("Downloading \"%s\"...", $st);
 
 					$guild = $discord->guilds->get("id", $guild_id);
-					var_dump($guild->channels);
+					var_dump($guild->channels->get("type", 2));
 					die;
 					$channel = $guild->channels->getAll("type", "text")->first();
 					

@@ -70,10 +70,17 @@ class StreamQueue
 				$guild = $discord->guilds->first();
 				$channel = $guild->channels->getAll("type", "text")->first();
 				
-				$act = function () {
-					$ytkernel = new YoutubeKernel($st, STORAGE_PATH."/mp3");
-					$ytkernel->run();
-					$ytkernel->join();
+				$act = function () use (&$st) {
+
+					try {
+						$ytkernel = new YoutubeKernel($st, STORAGE_PATH."/mp3");
+						$ytkernel->run();
+						$ytkernel->join();
+					} catch (\Error $e) {
+						printf("\n\nAn error occured!\n");
+						var_dump($e->getMessage(), $e->getFile(), $e->getLine());
+					}
+					
 					exit;
 				};
 

@@ -74,15 +74,13 @@ class StreamQueue
 					$act = function ($channel) use (&$st) {
 
 						try {
-							$error = 0;
 							$ytkernel = new YoutubeKernel($st, STORAGE_PATH."/mp3");
 							$ytkernel->run();
 						} catch (\Error $e) {
 							ob_start();
 							printf("\n\nAn error occured!\n");
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());
-							$channel->sendMessage(ob_get_clean());
-							$error = 1;
+							return $channel->sendMessage(ob_get_clean());
 						}
 
 						printf("Download success!\n");
@@ -90,31 +88,41 @@ class StreamQueue
 						try {
 							var_dump($channel);
 							var_dump($ytkernel);
-							$me = $channel->sendMessage(sprintf("\"%s\" has been downloaded (%s).", $st, $ytkernel->filename))->then(
-								function () {
-									printf("The message was sent!\n");
-								}
-							)->otherwise(
-								function ($e) {
-									printf("There was an error sending the message: %s\n", $e->getMessage());
-								}
-							);
-							var_dump($me);
+							$deffered = $channel->sendMessage(sprintf("\"%s\" has been downloaded (%s).", $st, $ytkernel->filename));
+							var_dump($deffered);
 							var_dump("me");
 						} catch (\Error $e) {
 							printf("\n\nAn error occured!\n");
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());
 						}
 
-						exit;
+						return $deffered;
 					};
 
 					$channel->sendMessage($r)->then(function ($message) use ($act, $channel) {
-						$act($channel);
-					    printf("The message was sent!\n");
+						$act($channel)->then(
+							function () {
+								printf("The message was sent!\n");
+							}
+						)->otherwise(
+							function ($e) {
+								printf("There was an error sending the message: %s\n", $e->getMessage());
+							}
+						);
+					    printf("The message was sent ~!\n");
+					    exit;
 					})->otherwise(function ($e) use ($act) {
-						$act($channel);
+						$act($channel)->then(
+							function () {
+								printf("The message was sent!\n");
+							}
+						)->otherwise(
+							function ($e) {
+								printf("There was an error sending the message: %s\n", $e->getMessage());
+							}
+						);
 					    printf("There was an error sending the message: %s\n", $e->getMessage());
+					    exit;
 					});
 
 				});

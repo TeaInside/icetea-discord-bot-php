@@ -2,7 +2,6 @@
 
 namespace DiscordDaemon;
 
-use Thread;
 use Discord\Discord;
 use Discord\WebSockets\Event;
 use Discord\Voice\VoiceClient;
@@ -13,7 +12,7 @@ use Discord\Voice\VoiceClient;
  * @package \DiscordDaemon
  * @version 0.0.1
  */
-class YoutubeKernel extends Thread
+class YoutubeKernel
 {
 	/**
 	 * @var string

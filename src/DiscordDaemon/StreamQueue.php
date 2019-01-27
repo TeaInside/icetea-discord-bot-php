@@ -95,7 +95,7 @@ class StreamQueue
 
 								if (is_string($file)) {
 									if (file_exists(STORAGE_PATH."/mp3/{$file}")) {
-										$r = sprintf("Download finished!\nYoutube ID: \"%s\"\nFilename: \"%s\"\n\nPreparing streaming...", $st, $file);	
+										$r = sprintf("Download finished!\nYoutube ID: \"%s\"\nFilename: \"%s\"\n\nPreparing streaming...", $st, $file);
 									} else {
 										$r = "Download succeded, but the file is missing.\n\nAborted!\n\nRunning next queue in background...";
 										$file = null;
@@ -110,23 +110,9 @@ class StreamQueue
 								var_dump($voiceChannel);
 								$channel->sendMessage($r)->then(function ($message) use ($file) {
 								    printf("The message was sent ~!\n");
-								})->otherwise(function ($e) {
+								})->otherwise(function ($e) {''
 								    printf("There was an error sending the message: %s\n", $e->getMessage());
-								    // exit;
 								});
-
-								var_dump("me");
-								if (is_string($file)) {
-									var_dump("me ok");
-									$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc) use (&$file) {
-									    echo "Joined voice channel.\r\n";
-									    $vc->playFile($file);
-									}, function ($e) {
-									    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
-									});
-								}
-
-								var_dump("me 2");
 							});
 							$this->bot->discord->run();
 							var_dump("memset 2ddd");

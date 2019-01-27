@@ -116,6 +116,7 @@ class StreamQueue
 							    if (is_string($file)) {
 							    	$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
 									    echo "Joined voice channel.\r\n";
+									    shell_exec("sleep 1000");
 									    $vc->playFile($file)->then(function () use ($channel) {
 									    	ob_start();
 										    echo "OK";

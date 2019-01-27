@@ -76,8 +76,7 @@ class StreamQueue
 						try {
 							$error = 0;
 							$ytkernel = new YoutubeKernel($st, STORAGE_PATH."/mp3");
-							$ytkernel->start();
-							$ytkernel->join();
+							$ytkernel->run();
 						} catch (\Error $e) {
 							ob_start();
 							printf("\n\nAn error occured!\n");
@@ -95,7 +94,8 @@ class StreamQueue
 						if ($i !== false) {
 							$fileName = substr($fileName, 0, $i);	
 						}
-
+						var_dump($channel);
+						var_dump($fileName);
 						try {
 							$channel->sendMessage(sprintf("\"%s\" has been downloaded (%s).", $st, $fileName))->then(
 								function () {
@@ -105,7 +105,7 @@ class StreamQueue
 								function ($e) {
 									printf("There was an error sending the message: %s\n", $e->getMessage());
 								}
-							);	
+							);
 						} catch (\Error $e) {
 							printf("\n\nAn error occured!\n");
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());

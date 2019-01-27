@@ -72,7 +72,7 @@ function callq(array &$argv): void
 		);
 		$discord->on("ready", function ($discord) use (&$argv) {
 			$guild = $discord->guilds->get("id", $argv["guild_id"]);
-			$channel = $guild->channels->getAll("type", 2)->first();
+			$channel = $guild->channels->getAll("type", "text")->first();
 			var_dump($channel);
 			$channel->sendMessage(
 				sprintf(

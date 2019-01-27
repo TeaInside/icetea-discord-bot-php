@@ -42,11 +42,12 @@ class MasterQueue
 		file_put_contents(STORAGE_PATH."/stream_queue/.gitignore", "*\n!.gitignore");
 
 		$this->queueFile = STORAGE_PATH."/stream_queue/{$guild_id}/queue.json";
-		if (!file_exists($this->queueFile)) {
+		if (file_exists($this->queueFile)) {
 			$this->queue = json_decode(file_get_contents($this->queueFile), true);
 			if (!is_array($this->queue)) {
 				$this->queue = [];
 			}
+		} else {
 			$this->queue = [];
 			file_put_contents($this->queueFile, "[]");
 		}

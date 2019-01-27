@@ -65,14 +65,23 @@ class StreamQueue
 			$this->bot->init();
 			$this->bot->discord->on("ready", function ($discord) use (&$st) {
 
-				$r = sprintf("Downloading %s...", $st);
+				$r = sprintf("Downloading \"%s\"...", $st);
 
 				$guild = $discord->guilds->first();
 				$channel = $guild->channels->getAll("type", "text")->first();
 				
-				$channel->sendMessage($r)->then(function ($message) {
+				$act = function () {
+					$ytkernel = new YoutubeKernel($st, STORAGE_PATH."/mp3");
+					$ytkernel->run();
+					$ytkernel->join();
+					exit;
+				};
+
+				$channel->sendMessage($r)->then(function ($message) use ($act) {
+					$act();
 				    printf("The message was sent!\n");
-				})->otherwise(function ($e) {
+				})->otherwise(function ($e) use ($act) {
+					$act();
 				    printf("There was an error sending the message: %s\n", $e->getMessage());
 				});
 

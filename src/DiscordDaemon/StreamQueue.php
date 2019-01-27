@@ -88,11 +88,14 @@ class StreamQueue
 							printf("[StreamQueue] Download success!\n");
 							proc_close(
 								proc_open(
-									sprintf(__STREAMING_ME, json_encode(
-										[
-											"file" => $file,
-											"guild_id" => $guild_id
-										]
+									sprintf(__STREAMING_ME, escapeshellarg(
+										json_encode(
+											[
+												"file" => $file,
+												"guild_id" => $guild_id
+											],
+											JSON_UNESCAPED_SLASHES
+										)
 									)), 
 									[
 										["pipe", "r"],

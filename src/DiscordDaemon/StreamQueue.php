@@ -109,10 +109,10 @@ class StreamQueue
 								$channel->sendMessage($r)->then(function ($message) use (&$file) {
 									var_dump("memset");
 								    // printf("The message was sent ~!\n");
-								    exit;
+								    // exit;
 								})->otherwise(function ($e) {
 								    printf("There was an error sending the message: %s\n", $e->getMessage());
-								    exit;
+								    // exit;
 								});
 							});
 							$this->bot->discord->run();

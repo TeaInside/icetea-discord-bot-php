@@ -46,8 +46,7 @@ class MasterQueue
 			$this->queue = json_decode(file_get_contents($this->queueFile), true);
 			if (!is_array($this->queue)) {
 				$this->queue = [];
-			}
-		} else {
+			}1
 			$this->queue = [];
 			file_put_contents($this->queueFile, "[]");
 		}
@@ -55,12 +54,17 @@ class MasterQueue
 		
 	/**
 	 * @param string $ytid
+	 * @throws DiscordDaemon\StreamQueue\QueueException
 	 * @return bool
 	 */
 	public function enqueue(string $ytid): bool
 	{
 		if (in_array($ytid, $this->queue)) {
 			return false;
+		}
+
+		if (count($this->queue) > 5) {
+			throw new QueueException("The system has reached the maximum number of queues (5 queues). Please try again later.");
 		}
 
 		$this->queue[] = $ytid;

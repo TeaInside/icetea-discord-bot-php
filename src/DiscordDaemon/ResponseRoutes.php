@@ -2,7 +2,9 @@
 
 namespace DiscordDaemon;
 
+use DiscordDaemon\StreamQueue;
 use DiscordDaemon\StreamQueue\MasterQueue;
+use DiscordDaemon\StreamQueue\QueueException;
 
 /**
  * @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
@@ -41,12 +43,16 @@ trait ResponseRoutes
 
 		if (preg_match("/^[\/\.\!\~]?vadd[\s\n]+([\S]+)$/USsi", $text, $m)) {
 			$st = new MasterQueue($message->channel->guild_id);
-			if ($st->enqueue($m[1])) {
-				$r = sprintf("\"%s\" has been added to queue", $m[1]);
-			} else {
-				$r = sprintf("Couldn't add \"%s\" because the same id has already been exist in the queue.\nSend !vq to show the queue.", $m[1]);
+			try {
+				if ($st->enqueue($m[1])) {
+					$r = sprintf("\"%s\" has been added to queue", $m[1]);
+				} else {
+					$r = sprintf("Couldn't add \"%s\" because the same id has already been exist in the queue.\nSend !vq to show the queue.", $m[1]);
+				}
+				unset($st);	
+			} catch (QueueException $e) {
+				$r = $e->getMessage();
 			}
-			unset($st);
 			return $r;
 		}
 	}

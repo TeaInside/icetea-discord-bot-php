@@ -4,7 +4,7 @@ if (isset($argv[1])):
 
 	$argv = json_decode($argv[1], true);
 
-	if (isset($argv["file"], $argv["guild_id"], $argv["ytid"])) {
+	if (isset($argv["file"], $argv["guild_id"], $argv["ytid"])):
 
 		require __DIR__."/vendor/autoload.php";
 		require __DIR__."/config.php";
@@ -54,7 +54,7 @@ if (isset($argv[1])):
 			);
 		});
 		$discord->run();
-	}
+	endif;
 
 endif;
 
@@ -73,7 +73,6 @@ function callq(array &$argv): void
 		$discord->on("ready", function ($discord) use (&$argv) {
 			$guild = $discord->guilds->get("id", $argv["guild_id"]);
 			$channel = $guild->channels->getAll("type", "text")->first();
-			var_dump($channel);
 			$channel->sendMessage(
 				sprintf(
 					"Download finished!\nYoutube ID: \"%s\"\nFilename: \"%s\"\n\nPreparing streaming...",

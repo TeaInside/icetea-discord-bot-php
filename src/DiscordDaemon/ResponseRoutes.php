@@ -27,6 +27,10 @@ trait ResponseRoutes
 			return "Pong!";
 		}
 
+		if (preg_match("/^[\/\.\!\~]?kd$/USsi", $text)) {
+			return shell_exec(__KILL_DCA);
+		}
+
 		if (preg_match("/^[\/\.\!\~]?vq$/USsi", $text)) {
 			$st = new MasterQueue($message->channel->guild_id);
 			$st = &$st->getQueue();

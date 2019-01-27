@@ -70,25 +70,31 @@ class StreamQueue
 				$guild = $discord->guilds->first();
 				$channel = $guild->channels->getAll("type", "text")->first();
 				
-				$act = function () use (&$st) {
+				$act = function ($channel) use (&$st) {
 
 					try {
+						$error = 0;
 						$ytkernel = new YoutubeKernel($st, STORAGE_PATH."/mp3");
-						$ytkernel->run();
+						$ytkernel->start();
 						$ytkernel->join();
 					} catch (\Error $e) {
+						ob_start();
 						printf("\n\nAn error occured!\n");
 						var_dump($e->getMessage(), $e->getFile(), $e->getLine());
+						$channel->sendMessage(ob_get_clean());
+						$error = 1;
 					}
 					
+					printf("Download success!\n");
+
 					exit;
 				};
 
-				$channel->sendMessage($r)->then(function ($message) use ($act) {
-					$act();
+				$channel->sendMessage($r)->then(function ($message) use ($act, $channel) {
+					$act($channel);
 				    printf("The message was sent!\n");
 				})->otherwise(function ($e) use ($act) {
-					$act();
+					$act($channel);
 				    printf("There was an error sending the message: %s\n", $e->getMessage());
 				});
 

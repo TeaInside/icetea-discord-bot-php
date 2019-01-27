@@ -43,7 +43,8 @@ class StreamQueue
 			}
 			unset($guildList);
 			printf("[StreamQueue] Sleeping for 10 seconds");
-			for ($i=0; $i < 10; $i++) { 
+			for ($i=0; $i < 10; $i++) {
+				sleep(1);
 				printf(".");
 			}
 			printf("\n");

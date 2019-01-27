@@ -94,7 +94,11 @@ class StreamQueue
 											"guild_id" => $guild_id
 										]
 									)), 
-									$fileDescriptor,
+									[
+										["pipe", "r"],
+										["file", "php://stdout", "w"],
+										["file", "php://stdout", "w"]
+									],
 									$pipes
 								)
 							);

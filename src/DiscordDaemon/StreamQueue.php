@@ -110,11 +110,12 @@ class StreamQueue
 							var_dump($voiceChannel);
 							var_dump($file, file_exists($file));
 							$r .= ($qq = ob_get_contents())." end";
-
+							file_put_contents("/tmp/err3557", $qq);
 							$channel->sendMessage($r)->then(function ($message) use ($discord, $file, $voiceChannel, $channel) {
+								ob_start();
 							    printf("The message was sent ~! 2\n");
 							    if (is_string($file)) {
-							    	$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
+							    	$me = $discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
 							    		ob_start();
 									    echo "Joined voice channel.\r\n";
 									    $q = $vc->playFile($file)->then(function () use ($channel) {
@@ -133,7 +134,9 @@ class StreamQueue
 									    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
 									    $channel->sendMessage(ob_get_clean()." end 333");
 									});
+									var_dump($me);
 							    }
+							    file_put_contents("/tmp/err338", ob_get_clean()." end 338");
 							})->otherwise(function ($e) {
 							    printf("There was an error sending the message: %s\n", $e->getMessage());
 							});

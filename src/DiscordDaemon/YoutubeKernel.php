@@ -28,6 +28,7 @@ class YoutubeKernel extends Thread
 	/**
 	 * @var string
 	 */
+	public $filename = null;
 
 	/**
 	 * @param string $ytid
@@ -63,11 +64,7 @@ class YoutubeKernel extends Thread
 			$this->chdir
 		);
 		if (preg_match("/\[ffmpeg\] Destination: (.*.mp3)/Usi", stream_get_contents($pipes[1]), $m)) {
-			var_dump($m);
-			$shm_key = ftok(__FILE__, 'a');
-			$shmid = shmop_open($shm_key, "c", 0644, 255);
-			shmop_write($shmid, sprintf("%s\0", $m[1]), 0);
-			shmop_close($shmid);
+			$this->filename = $m[1];
 		}
 		proc_close($me);
 	}

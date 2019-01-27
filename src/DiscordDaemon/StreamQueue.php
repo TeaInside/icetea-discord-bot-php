@@ -84,20 +84,12 @@ class StreamQueue
 							$channel->sendMessage(ob_get_clean());
 							$error = 1;
 						}
-						
-						$shm_key = ftok(__DIR__."/YoutubeKernel.php", 'a');
-						$shmid = shmop_open($shm_key, "c", 0644, 255);
-						$fileName = shmop_read($shmid, 0, 255);
-						shmop_close($shmid);
+
 						printf("Download success!\n");
-						$i = strpos($fileName, "\0");
-						if ($i !== false) {
-							$fileName = substr($fileName, 0, $i);	
-						}
-						var_dump($channel);
-						var_dump($fileName);
+
 						try {
-							$channel->sendMessage(sprintf("\"%s\" has been downloaded (%s).", $st, $fileName))->then(
+							var_dump($ytkernel);
+							$channel->sendMessage(sprintf("\"%s\" has been downloaded (%s).", $st, $ytkernel->filename))->then(
 								function () {
 									printf("The message was sent!\n");
 								}
@@ -106,6 +98,7 @@ class StreamQueue
 									printf("There was an error sending the message: %s\n", $e->getMessage());
 								}
 							);
+							var_dump("me");
 						} catch (\Error $e) {
 							printf("\n\nAn error occured!\n");
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());

@@ -132,7 +132,6 @@ mdd1:
 
 				$discord->on("message", function ($message) use ($discord) {
 						try {
-							var_dump($message);
 							(new Response($discord, $message))->run();
 						} catch (\Error $e) {
 							printf("\n\nAn error occured!\n");

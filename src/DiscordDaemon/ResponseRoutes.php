@@ -39,7 +39,14 @@ trait ResponseRoutes
 			// }
 		}
 
-		if (preg_match("/^[\/\.\!\~]?vadd[\s\n]+(.+)$/USsi", $text)) {
+		if (preg_match("/^[\/\.\!\~]?vadd[\s\n]+(.+)$/USsi", $text, $m)) {
+			$st = new MasterQueue($message->channel->guild_id);
+			// $st = $st->enqueue();
+
+			ob_start();
+			var_dump($m);
+
+			return ob_get_clean();
 		}
 	}
 }

@@ -35,6 +35,8 @@ final class Bot
 	 */
 	public function run(): void
 	{
+		$radio = in_array("--radio", $_SERVER["argv"]);
+
 		file_put_contents(__DISCORD_DAEMON_PID_FILE, getmypid());
 		cli_set_process_title(
 			sprintf(
@@ -43,13 +45,21 @@ final class Bot
 			)
 		);
 
-		if (!($radioPid = pcntl_fork())) {
-			cli_set_process_title("discordd: radio_worker --memory-copy");
-			$this->radio();
-			exit;	
+		if ($radio) {
+			if (!pcntl_fork()) {
+				cli_set_process_title("discordd: radio_worker --memory-copy");
+				$this->radio();
+				exit;	
+			}
+		} else {
+			if (!pcntl_fork()) {
+				cli_set_process_title("discordd: stream_queue --memory-copy");
+				$this->streamQueue();
+				exit;	
+			}
 		}
 
-		if (!($eventHandlerPid = pcntl_fork())) {
+		if (!pcntl_fork()) {
 			cli_set_process_title(
 				sprintf(
 					"discordd: event_handler",
@@ -62,6 +72,14 @@ final class Bot
 			$this->eventHandler();
 			exit;
 		}
+	}
+
+	/**
+	 * @return void
+	 */
+	private function radio(): void
+	{
+		(new StreamQueue($this))->run();
 	}
 
 	/**
@@ -80,7 +98,7 @@ final class Bot
 	 */
 	private function radio(): void
 	{
-	/*	$status = null;
+		$status = null;
 		foreach (__DISCORD_RADIO_STREAM_TARGET as $v) {
 			if (!(pcntl_fork())) {
 				if (isset($v["guild_id"], $v["channel_id"])) {
@@ -116,7 +134,7 @@ mdd1:
 				exit;
 			}
 		}
-		pcntl_wait($status);*/
+		pcntl_wait($status);
 		return;
 	}
 

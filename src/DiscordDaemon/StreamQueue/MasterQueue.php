@@ -52,53 +52,5 @@ class MasterQueue
 			file_put_contents($this->queueFile, "[]");
 		}
 	}
-
-	/**
-	 * @param string $ytid
-	 * @return bool
-	 */
-	private function hasDownloaded(string $ytid): bool
-	{
-		if (! file_exists(STORAGE_PATH."/mp3/hash.table")) {
-			return false;
-		}
-
-		$handle = fopen(STORAGE_PATH."/mp3/hash.table", "r");
-		$it = 0;
-		while ($r = fgets($handle)) {
-			$r = json_decode($r, true);
-			if (isset($r[0]) && ($r[0] === "ytid")) {
-				goto closeTrue;
-			}
-			$it++;
-		}
-
-		fclose($handle);
-		return false;
-
-		closeTrue:
-			fclose($handle);
-			return true;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getQueue(): array
-	{
-		return $this->queue;
-	}
-
-	/**
-	 * @param string $ytid
-	 * @return bool
-	 */
-	public function enqueue(string $ytid): bool
-	{
-		$ytid = trim($ytid);
-		$this->queue[] = [
-			"id" => $ytid,
-			"downloaded" => $this->hasDownloaded($ytid)
-		];
-	}
+	
 }

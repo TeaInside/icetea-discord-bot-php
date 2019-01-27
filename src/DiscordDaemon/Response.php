@@ -48,7 +48,7 @@ class Response
 				)
 			);
 
-			$reply = $this->getResponse($text, $guild, $channel);
+			$reply = $this->getResponse($text, $guild, $channel, $this->message);
 
 			if (isset($reply)) {
 				$channel->sendMessage($reply)->then(function ($message) {

@@ -72,7 +72,7 @@ class StreamQueue
 					$guild = $discord->guilds->get("id", $guild_id);
 					$channel = $guild->channels->getAll("type", "text")->first();
 					
-					$act = function ($channel) use (&$st, $discord) {
+					$act = function ($channel) use (&$st, &$discord, &$guild_id) {
 
 						try {
 							$ytkernel = new YoutubeKernel($st, STORAGE_PATH."/mp3");
@@ -81,10 +81,12 @@ class StreamQueue
 							printf("\n\nAn error occured!\n");
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());
 						}
-						$file = STORAGE_PATH."/mp3/{$ytkernel->file}";
+						$file = STORAGE_PATH."/mp3/{$ytkernel->filename}";
 						unset($youtube_kernel);
 						printf("[StreamQueue] Download success!\n");
-
+						$guild = $discord->guilds->get("id", $guild_id);
+						$channel = $guild->channels->getAll("type", "text")->first();
+						$voiceChannel = $guild->channels->get("type", 2);
 						$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
 						    echo "Joined voice channel.\r\n";
 						    $q = $vc->playFile($file)->then(function () use ($channel) {

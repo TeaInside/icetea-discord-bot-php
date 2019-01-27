@@ -68,6 +68,14 @@ class MasterQueue
 	}
 
 	/**
+	 * Destructor.
+	 */
+	public function __destruct()
+	{
+		file_put_contents($this->queueFile, json_decode($this->queue));
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getQueue(): array

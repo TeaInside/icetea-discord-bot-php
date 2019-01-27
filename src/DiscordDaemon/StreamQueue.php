@@ -84,20 +84,26 @@ class StreamQueue
 						$file = STORAGE_PATH."/mp3/{$ytkernel->filename}";
 						unset($youtube_kernel);
 						printf("[StreamQueue] Download success!\n");
-						$guild = $discord->guilds->get("id", $guild_id);
-						$channel = $guild->channels->getAll("type", "text")->first();
-						$voiceChannel = $guild->channels->get("type", 2);
-						$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
-						    echo "Joined voice channel.\r\n";
-						    $q = $vc->playFile($file)->then(function () use ($channel) {
-							    echo "OK";
-						    })->otherwise(function () use ($channel) {
-							    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
-						    });
-						}, function ($e) use ($channel) {
-						    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
-						});
+						try {
+							
+							$guild = $discord->guilds->get("id", $guild_id);
+							$channel = $guild->channels->getAll("type", "text")->first();
+							$voiceChannel = $guild->channels->get("type", 2);
 
+							$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
+							    echo "Joined voice channel.\r\n";
+							    $q = $vc->playFile($file)->then(function () use ($channel) {
+								    echo "OK";
+							    })->otherwise(function () use ($channel) {
+								    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
+							    });
+							}, function ($e) use ($channel) {
+							    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
+							});
+
+						} catch (\Error $e) {
+							
+						}
 					};
 
 					$channel->sendMessage($r)->then(function ($message) use ($act, $channel) {

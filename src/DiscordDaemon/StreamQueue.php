@@ -106,7 +106,7 @@ class StreamQueue
 
 								$guild = $discord->guilds->get("id", $guild_id);
 								$channel = $guild->channels->getAll("type", "text")->first();
-								$channel->sendMessage($r)->then(function ($message, &$file) {
+								$channel->sendMessage($r)->then(function ($message) use (&$file) {
 								    printf("The message was sent ~!\n");
 								    if (is_string($file)) {
 								    	var_dump($file);

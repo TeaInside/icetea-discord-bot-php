@@ -48,7 +48,7 @@ class YoutubeKernel extends Thread
 	{
 		$fd = [
 			["pipe", "r"],
-			["file", "php://stdout", "w"],
+			["pipe", "w"],
 			["file", "php://stdout", "w"]
 		];
 
@@ -62,13 +62,13 @@ class YoutubeKernel extends Thread
 			$pipes,
 			$this->chdir
 		);
-		proc_close($me);
-		if (preg_match("/\[ffmpeg\] Destination: (.*.mp3)/Usi", ob_get_clean(), $m)) {
+		if (preg_match("/\[ffmpeg\] Destination: (.*.mp3)/Usi", stream_get_contents($pipes[1]), $m)) {
 			var_dump($m);
 			$shm_key = ftok(__FILE__, 'a');
 			$shmid = shmop_open($shm_key, "c", 0644, 255);
 			shmop_write($shmid, sprintf("%s\0", $m[1]), 0);
 			shmop_close($shmid);
 		}
+		proc_close($me);
 	}
 }

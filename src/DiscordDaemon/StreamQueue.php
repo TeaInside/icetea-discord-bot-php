@@ -116,8 +116,10 @@ class StreamQueue
 							$this->bot->discord->run();
 							exit;
 					    }
+					    var_dump("waiting...");
 					    pcntl_wait($status);
 					    $status = null;
+					    var_dump($file);
 					    if (is_string($file)) {
 					    	$file = STORAGE_PATH."/mp3/{$file}";
 					    	if (!pcntl_fork()) {

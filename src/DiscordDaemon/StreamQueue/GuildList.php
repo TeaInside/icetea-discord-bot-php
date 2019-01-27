@@ -22,7 +22,7 @@ class GuildList
 	{
 		if (is_dir(STORAGE_PATH."/stream_queue/")) {
 			$this->guildList = scandir(STORAGE_PATH."/stream_queue/");
-			unset($this->guildList[0], $this->guildList[1]);
+			unset($this->guildList[0], $this->guildList[1], $this->guildList[3]);
 		}
 	}
 

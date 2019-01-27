@@ -81,29 +81,25 @@ class StreamQueue
 							printf("\n\nAn error occured!\n");
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());
 						}
-						$file = STORAGE_PATH."/mp3/{$ytkernel->filename}";
-						unset($youtube_kernel);
-						printf("[StreamQueue] Download success!\n");
-						try {
-							
-							$guild = $discord->guilds->get("id", $guild_id);
-							$channel = $guild->channels->getAll("type", "text")->first();
-							$voiceChannel = $guild->channels->get("type", 2);
-							var_dump($voiceChannel);
-							$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
-							    echo "Joined voice channel.\r\n";
-							    $q = $vc->playFile($file)->then(function () use ($channel) {
-								    echo "OK";
-							    })->otherwise(function () use ($channel) {
-								    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
-							    });
-							}, function ($e) use ($channel) {
-							    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
-							});
 
-						} catch (\Error $e) {
-							printf("\n\nAn error occured!\n");
-							var_dump($e->getMessage(), $e->getFile(), $e->getLine());
+						if (is_string($ytkernel->filename)) {
+							$file = STORAGE_PATH."/mp3/{$ytkernel->filename}";
+							unset($youtube_kernel);
+							printf("[StreamQueue] Download success!\n");
+							proc_close(
+								proc_open(
+									sprintf(__STREAMING_ME, json_encode(
+										[
+											"file" => $file,
+											"guild_id" => $guild_id
+										]
+									)), 
+									$fileDescriptor,
+									$pipes
+								)
+							);
+							$pipes = null;
+							unset($pipes);
 						}
 					};
 

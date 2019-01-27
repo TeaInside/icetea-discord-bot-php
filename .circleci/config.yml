@@ -6,4 +6,3 @@ jobs:
     working_directory: ~/me
     steps:
       - checkout
-      - run: php -v

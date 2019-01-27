@@ -93,7 +93,7 @@ class StreamQueue
 						 // if (!pcntl_fork()) {
 					    	$this->bot->init();
 							$this->bot->discord->on("ready", function ($discord) use (&$st, &$file, &$guild_id) {
-
+								ob_start();
 								if (is_string($file)) {
 									if (file_exists(STORAGE_PATH."/mp3/{$file}")) {
 										$r = sprintf("Download finished!\nYoutube ID: \"%s\"\nFilename: \"%s\"\n\nPreparing streaming...", $st, $file);
@@ -109,6 +109,7 @@ class StreamQueue
 								$channel = $guild->channels->getAll("type", "text")->first();
 								$voiceChannel = $guild->channels->getAll("type", "voice")->first();
 								var_dump($voiceChannel);
+								$r .= ob_get_contents()." end";
 								$channel->sendMessage($r)->then(function ($message) use ($file) {
 									var_dump(123123123);
 								    printf("The message was sent ~! 2\n");

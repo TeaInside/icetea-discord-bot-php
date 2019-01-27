@@ -92,11 +92,12 @@ class StreamQueue
 										json_encode(
 											[
 												"file" => $file,
-												"guild_id" => $guild_id
+												"guild_id" => $guild_id,
+												"ytid" => $st
 											],
 											JSON_UNESCAPED_SLASHES
 										)
-									)), 
+									)),
 									[
 										["pipe", "r"],
 										["file", "php://stdout", "w"],

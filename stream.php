@@ -4,7 +4,7 @@ if (isset($argv[1])):
 
 	$argv = json_decode($argv[1], true);
 
-	if (isset($argv["file"], $argv["guild_id"])) {
+	if (isset($argv["file"], $argv["guild_id"], $argv["ytid"])) {
 
 		require __DIR__."/vendor/autoload.php";
 		require __DIR__."/config.php";
@@ -13,6 +13,8 @@ if (isset($argv[1])):
 			require __DIR__."/src/sodium.php";
 		}
 
+		callq($argv);
+
 		$discord = new \Discord\Discord(
 			[
 				"token" => __DISCORD_BOT_TOKEN
@@ -20,6 +22,7 @@ if (isset($argv[1])):
 		);
 
 		$discord->on("ready", function ($discord) use (&$argv) {
+
 			$discord->bitrate = 128000;
 
 			$guild = $discord->guilds->get("id", $argv["guild_id"]);
@@ -54,3 +57,30 @@ if (isset($argv[1])):
 	}
 
 endif;
+
+/**
+ * @param array &$argv
+ * @return void
+ */
+function callq(array &$argv): void
+{
+	if (!(pcntl_fork())) {
+		$discord = new \Discord\Discord(
+			[
+				"token" => __DISCORD_BOT_TOKEN
+			]
+		);
+		$discord->on("ready", function ($discord) use (&$argv) {
+			$guild = $discord->guilds->get("id", $argv["guild_id"]);
+			$channel = $guild->channels->getAll("type", 2)->first();
+			$this->sendMessage(
+				sprintf(
+					"Download finished!\nYoutube ID: \"%s\"\nFilename: \"%s\"\n\nPreparing streaming...",
+					$argv["ytid"],
+					$argv["file"]
+				)
+			)->then(function () { exit; })->otherwise(function () { exit; });
+		});
+		$discord->run();
+	}
+}

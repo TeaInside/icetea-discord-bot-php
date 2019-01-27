@@ -77,7 +77,7 @@ final class Bot
 	/**
 	 * @return void
 	 */
-	private function radio(): void
+	private function streamQueue(): void
 	{
 		(new StreamQueue($this))->run();
 	}

@@ -115,17 +115,19 @@ class StreamQueue
 							    printf("The message was sent ~! 2\n");
 							    if (is_string($file)) {
 							    	$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
+							    		ob_start();
 									    echo "Joined voice channel.\r\n";
-									    shell_exec("sleep 1000");
-									    $vc->playFile($file)->then(function () use ($channel) {
+									    $q = $vc->playFile($file)->then(function () use ($channel) {
 									    	ob_start();
 										    echo "OK";
-										    $channel->sendMessage(ob_get_clean()." end 335");
+										    file_put_contents("/tmp/err334", ob_get_clean()." end 335");
 									    })->otherwise(function () use ($channel) {
 									    	ob_start();
 										    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
-										    $channel->sendMessage(ob_get_clean()." end 334");
+										    file_put_contents("/tmp/err334", ob_get_clean()." end 334");
 									    });
+									    var_dump($q, $vc);
+									    file_put_contents("/tmp/err337", ob_get_clean()." end 337");
 									}, function ($e) use ($channel) {
 										ob_start();
 									    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 

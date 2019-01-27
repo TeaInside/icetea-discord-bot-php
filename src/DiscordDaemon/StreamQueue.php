@@ -84,18 +84,19 @@ class StreamQueue
 
 						printf("[StreamQueue] Download success!\n");
 
-						return $ytkernel->filename;
+
+
+						shell_exec("sleep 1000");
+						var_dump(123);
 					};
 
 					$channel->sendMessage($r)->then(function ($message) use ($act, $channel, $notify) {
 					    printf("The message was sent ~! 1\n");
-					    $a = $act($channel);
-					    var_dump($a);
+					    $act($channel);
 					    exit;
 					})->otherwise(function ($e) use ($act, $channel, $notify) {
 					    printf("There was an error sending the message: %s\n", $e->getMessage());
-					    $a = $act($channel);
-					    var_dump($a);
+					    $act($channel);
 					    exit;
 					});
 

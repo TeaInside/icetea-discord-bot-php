@@ -89,7 +89,7 @@ class StreamQueue
 							$guild = $discord->guilds->get("id", $guild_id);
 							$channel = $guild->channels->getAll("type", "text")->first();
 							$voiceChannel = $guild->channels->get("type", 2);
-
+							var_dump($voiceChannel);
 							$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
 							    echo "Joined voice channel.\r\n";
 							    $q = $vc->playFile($file)->then(function () use ($channel) {

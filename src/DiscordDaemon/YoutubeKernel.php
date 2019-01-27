@@ -26,6 +26,10 @@ class YoutubeKernel extends Thread
 	private $chdir;
 
 	/**
+	 * @var string
+	 */
+
+	/**
 	 * @param string $ytid
 	 *
 	 * Constructor.
@@ -51,6 +55,7 @@ class YoutubeKernel extends Thread
 		$ytdl = trim(shell_exec("which youtube-dl"));
 		$py = trim(shell_exec("which python"));
 		$ytid = escapeshellarg($this->ytid);
+		ob_start();
 		$me = proc_open(
 			"exec {$py} {$ytdl} -f 18 --extract-audio --audio-format mp3 {$ytid} --cache-dir /var/cache/youtube-dl",
 			$fd,
@@ -58,5 +63,11 @@ class YoutubeKernel extends Thread
 			$this->chdir
 		);
 		proc_close($me);
+		if (preg_match("/\[ffmpeg\] Destination: (.*.mp3)/Usi", ob_get_clean(), $m)) {
+			$shm_key = ftok(__FILE__, 'a');
+			$shmid = shmop_open($shm_key, "c", 0644, 255);
+			shmop_write($shmid, sprintf("%s\0", $m[1]), 0);
+			shmop_close($shmid);
+		}
 	}
 }

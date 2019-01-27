@@ -85,8 +85,21 @@ class StreamQueue
 						$error = 1;
 					}
 					
+					$shm_key = ftok(__FILE__, 'a');
+					$shmid = shmop_open($shm_key, "c", 0644, 255);
+					$fileName = shmop_read($shmid, 0, 255);
+					shmop_close($shmid);
 					printf("Download success!\n");
+					
+					$i = strpos($fileName, "\0");
+					if ($i === false) {
+						return $fileName;
+					}
 
+					$fileName =  substr($fileName, 0, $i);
+					
+					$channel->sendMessage("\"%s\" has been downloaded (%s).", $fileName);
+					
 					exit;
 				};
 

@@ -52,7 +52,21 @@ class MasterQueue
 			file_put_contents($this->queueFile, "[]");
 		}
 	}
-	
+		
+	/**
+	 * @param string $ytid
+	 * @return bool
+	 */
+	public function enqueue(string $ytid): bool
+	{
+		if (in_array($ytid, $this->queue)) {
+			return false;
+		}
+
+		$this->queue[] = $ytid;
+		return true;
+	}
+
 	/**
 	 * @return array
 	 */

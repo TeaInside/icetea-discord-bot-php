@@ -61,6 +61,7 @@ class StreamQueue
 		$st = new MasterQueue($guild_id);
 		if ($st->countQueue()) {
 			$st = $st->dequeue();
+			printf("Preparing download for %s...\n", $st);
 			$this->bot->init();
 			$this->bot->discord->on("ready", function ($discord) use (&$st) {
 
@@ -74,7 +75,9 @@ class StreamQueue
 				})->otherwise(function ($e) {
 				    printf("There was an error sending the message: %s\n", $e->getMessage());
 				});
+
 			});
+			$this->bot->discord->run();
 		} else {
 			printf("There is no queue for guild %s\n", $guild_id);
 		}

@@ -108,8 +108,11 @@ class StreamQueue
 								$guild = $discord->guilds->get("id", $guild_id);
 								$channel = $guild->channels->getAll("type", "text")->first();
 								$voiceChannel = $guild->channels->getAll("type", "voice")->first();
+								var_dump($voiceChannel);
+								$r .= ($qq = ob_get_contents())." end";
+								echo $qq;
 								var_dump($guild->channels);
-								$r .= ob_get_contents()." end";
+								flush();
 								$channel->sendMessage($r)->then(function ($message) use ($file) {
 									var_dump(123123123);
 								    printf("The message was sent ~! 2\n");

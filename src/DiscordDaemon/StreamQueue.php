@@ -104,7 +104,7 @@ class StreamQueue
 								} else {
 									$r = "Error data";
 								}
-								var_dump("mememe")
+								var_dump("mememe");
 								$guild = $discord->guilds->get("id", $guild_id);
 								$channel = $guild->channels->getAll("type", "text")->first();
 								$voiceChannel = $guild->channels->getAll("type", "voice")->first();

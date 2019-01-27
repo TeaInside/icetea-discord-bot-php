@@ -80,7 +80,7 @@ final class Bot
 	 */
 	private function radio(): void
 	{
-		$status = null;
+	/*	$status = null;
 		foreach (__DISCORD_RADIO_STREAM_TARGET as $v) {
 			if (!(pcntl_fork())) {
 				if (isset($v["guild_id"], $v["channel_id"])) {
@@ -116,7 +116,7 @@ mdd1:
 				exit;
 			}
 		}
-		pcntl_wait($status);
+		pcntl_wait($status);*/
 		return;
 	}
 

@@ -38,5 +38,8 @@ trait ResponseRoutes
 			// 	$i++;
 			// }
 		}
+
+		if (preg_match("/^[\/\.\!\~]?vadd[\s\n]+(.+)$/USsi", $text)) {
+		}
 	}
 }

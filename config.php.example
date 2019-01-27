@@ -1,6 +1,31 @@
 <?php
 
-define("TOKEN", "");
+define("BASEPATH", __DIR__);
+define("STORAGE_PATH", BASEPATH."/storage");
 define("CLIENT_SECRET", "");
-define("SUDOERS", ["ammarfaizi2"]);
+define("__DISCORD_BOT_TOKEN", "");
+define("__DISCORD_DAEMON_PID_FILE", __DIR__."/discordd.pid");
+define("__DISCORD_WORKERS", 3);
+define("__DISCORD_RADIO_PLAYLIST_DIR", __DIR__."/voice");
+define("__DISCORD_RADIO_STREAM_TARGET",
+        [
+                [
+                        // tea_radio @TeaInside
+                        "guild_id" => "446547692802277376",
+                        "channel_id" => "446634690015657987"
+                ]
+        ]
+);
+define("__KILL_DCA", "/usr/bin/env bash ".escapeshellarg(__DIR__."/kill_dca.sh")." 2>&1");
 
+
+file_put_contents(
+        __DIR__."/vendor/team-reflex/discord-php/src/Discord/WebSockets/Events/PresenceUpdate.php",
+        str_replace(
+                "'nick'   => \$presenceAttributes['nick'],", 
+                "'nick'   => (isset(\$presenceAttributes['nick']) ? \$presenceAttributes['nick'] : null),",
+                file_get_contents(
+                        __DIR__."/vendor/team-reflex/discord-php/src/Discord/WebSockets/Events/PresenceUpdate.php"
+                )
+        )
+);

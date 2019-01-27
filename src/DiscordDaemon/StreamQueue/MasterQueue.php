@@ -53,4 +53,11 @@ class MasterQueue
 		}
 	}
 	
+	/**
+	 * @return array
+	 */
+	public function getQueue(): array
+	{
+		return $this->queue;
+	}
 }

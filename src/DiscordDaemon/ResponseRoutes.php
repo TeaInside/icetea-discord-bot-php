@@ -31,14 +31,12 @@ trait ResponseRoutes
 			if (!$st) {
 				return "Queue is empty.";
 			}
-			$r = "";
-			$i = 0;
-			foreach ($st as $st) {
-				$r .= "{$i}. {$st}";
-
-
-				$i++;
-			}
+			// $r = "";
+			// $i = 0;
+			// foreach ($st as $st) {
+			// 	$r .= "{$i}. {$st}";
+			// 	$i++;
+			// }
 		}
 	}
 }

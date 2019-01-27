@@ -61,7 +61,7 @@ class StreamQueue
 		if ($st->countQueue()) {
 			$st = $st->dequeue();
 			$this->bot->init();
-			$this->discord->on("ready", function ($discord) use (&$st) {
+			$this->bot->discord->on("ready", function ($discord) use (&$st) {
 
 				$r = sprintf("Downloading %s...", $st);
 

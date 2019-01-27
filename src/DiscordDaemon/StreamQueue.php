@@ -87,71 +87,15 @@ class StreamQueue
 						return $ytkernel->filename;
 					};
 
-					$notify = function ($file) use (&$st, &$guild_id) {
-						printf("Sending notification...\n");
-				    	$this->bot->init();
-						$this->bot->discord->on("ready", function ($discord) use (&$st, &$file, &$guild_id) {
-							ob_start();
-							if (is_string($file)) {
-								if (file_exists(STORAGE_PATH."/mp3/{$file}")) {
-									$r = "ok";
-									//$r = sprintf("Download finished!\nYoutube ID: \"%s\"\nFilename: \"%s\"\n\nPreparing streaming...", $st, $file);
-									$file = STORAGE_PATH."/mp3/{$file}";
-								} else {
-									$r = "Download succeded, but the file is missing.\n\nAborted!\n\nRunning next queue in background...";
-									$file = null;
-								}
-							} else {
-								$r = "Error data";
-							}
-							$guild = $discord->guilds->get("id", $guild_id);
-							$channel = $guild->channels->getAll("type", "text")->first();
-							$voiceChannel = $guild->channels->get("type", 2);
-							var_dump($voiceChannel);
-							var_dump($file, file_exists($file));
-							$r .= ($qq = ob_get_contents())." end";
-							file_put_contents("/tmp/err3557", $qq);
-							$channel->sendMessage($r)->then(function ($message) use ($discord, $file, $voiceChannel, $channel) {
-								ob_start();
-							    printf("The message was sent ~! 2\n");
-							    if (is_string($file)) {
-							    	$me = $discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
-							    		ob_start();
-									    echo "Joined voice channel.\r\n";
-									    $q = $vc->playFile($file)->then(function () use ($channel) {
-									    	ob_start();
-										    echo "OK";
-										    file_put_contents("/tmp/err334", ob_get_clean()." end 335");
-									    })->otherwise(function () use ($channel) {
-									    	ob_start();
-										    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
-										    file_put_contents("/tmp/err334", ob_get_clean()." end 334");
-									    });
-									    var_dump($q, $vc);
-									    file_put_contents("/tmp/err337", ob_get_clean()." end 337");
-									}, function ($e) use ($channel) {
-										ob_start();
-									    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
-									    $channel->sendMessage(ob_get_clean()." end 333");
-									});
-									var_dump($me);
-							    }
-							    file_put_contents("/tmp/err338", ob_get_clean()." end 338");
-							})->otherwise(function ($e) {
-							    printf("There was an error sending the message: %s\n", $e->getMessage());
-							});
-						});
-						$this->bot->discord->run();
-						exit;
-					};
-
 					$channel->sendMessage($r)->then(function ($message) use ($act, $channel, $notify) {
 					    printf("The message was sent ~! 1\n");
-					    $notify($act($channel));
+					    $a = $act($channel);
+					    var_dump($a);
 					    exit;
 					})->otherwise(function ($e) use ($act, $channel, $notify) {
 					    printf("There was an error sending the message: %s\n", $e->getMessage());
-					    $notify($act($channel));
+					    $a = $act($channel);
+					    var_dump($a);
 					    exit;
 					});
 

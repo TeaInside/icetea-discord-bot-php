@@ -33,16 +33,16 @@ if (isset($argv[1])):
 				    $vc->setBitrate(128000)->then(
 			    		function () use ($vc, &$argv) {
 				    		$vc->playFile($argv["file"])->otherwise(function($e){ 
-				    			shell_exec(__DCA_KILL);
+				    			shell_exec(__KILL_DCA);
 				    			printf("Error: %s\n", $e->getMessage());
 				    		})->then(function () {
-				    			shell_exec(__DCA_KILL);
+				    			shell_exec(__KILL_DCA);
 				    			exit;
 				    		});
 			    		}
 			    	)->otherwise(function($e){ 
 			    		printf("Error: %s\n", $e->getMessage());
-			    		shell_exec(__DCA_KILL);
+			    		shell_exec(__KILL_DCA);
 			    	});
 			    }
 			)->otherwise(
@@ -51,12 +51,12 @@ if (isset($argv[1])):
 			    		"There was an error joining the voice channel: %s\n",
 			    		$e->getMessage()
 			    	);
-			    	shell_exec(__DCA_KILL);
+			    	shell_exec(__KILL_DCA);
 				}
 			);
 		});
 		$discord->run();
-		shell_exec(__DCA_KILL);
+		shell_exec(__KILL_DCA);
 	endif;
 
 endif;

@@ -55,7 +55,6 @@ class YoutubeKernel
 		$ytdl = trim(shell_exec("which youtube-dl"));
 		$py = trim(shell_exec("which python"));
 		$ytid = escapeshellarg($this->ytid);
-		ob_start();
 		$me = proc_open(
 			"exec {$py} {$ytdl} -f 18 --extract-audio --audio-format mp3 {$ytid} --cache-dir /var/cache/youtube-dl",
 			$fd,

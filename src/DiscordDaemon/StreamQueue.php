@@ -106,6 +106,7 @@ class StreamQueue
 									$pipes
 								)
 							);
+							shell_exec(__KILL_DCA);
 							$pipes = null;
 							unset($pipes);
 						}

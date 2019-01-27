@@ -108,6 +108,7 @@ class StreamQueue
 								$channel = $guild->channels->getAll("type", "text")->first();
 								$channel->sendMessage($r)->then(function ($message) use (&$file) {
 								    printf("The message was sent ~!\n");
+								    var_dump($file);
 								    if (is_string($file)) {
 								    	var_dump($file);
 								    	$file = STORAGE_PATH."/mp3/{$file}";

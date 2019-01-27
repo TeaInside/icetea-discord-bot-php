@@ -62,9 +62,17 @@ final class Bot
 			$this->eventHandler();
 			exit;
 		}
+	}
 
+	/**
+	 * @return void
+	 */
+	public function join(): void
+	{
 		$status = null;
 		pcntl_wait($status);
+
+		printf("Process exited with status %d\n", $status);
 	}
 
 	/**

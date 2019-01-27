@@ -18,8 +18,12 @@ trait ResponseRoutes
 	 */
 	private function getResponse(string $text, $guild, $channel)
 	{
-		if (preg_match("/^[\/\.\!\~]?ping$/i", $text)) {
+		if (preg_match("/^[\/\.\!\~]?ping$/USsi", $text)) {
 			return "Pong!";
+		}
+
+		if (preg_match("/^[\/\.\!\~]?vq$/USsi", $text)) {
+			
 		}
 	}
 }

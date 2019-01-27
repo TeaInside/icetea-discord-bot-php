@@ -22,14 +22,14 @@ if (isset($argv[1])):
 		$discord->on("ready", function ($discord) use (&$argv) {
 			$discord->bitrate = 128000;
 
-			$guild = $discord->guilds->get("id", $guild_id);
+			$guild = $discord->guilds->get("id", $argv["guild_id"]);
 			$channel = $guild->channels->getAll("type", 2)->first();
 
 			$discord->joinVoiceChannel($channel)->then(
 				function (\Discord\Voice\VoiceClient $vc) use (&$argv) {
 				    $vc->setBitrate(128000)->then(
 			    		function () use ($vc, &$argv) {
-				    		$vc->playFile($file)->otherwise(function($e){ 
+				    		$vc->playFile($argv["file"])->otherwise(function($e){ 
 				    			printf("Error: %s\n", $e->getMessage());
 				    		})->then(function () {
 				    			exit;

@@ -72,7 +72,7 @@ class MasterQueue
 	 */
 	public function __destruct()
 	{
-		file_put_contents($this->queueFile, json_decode($this->queue));
+		file_put_contents($this->queueFile, json_encode($this->queue));
 	}
 
 	/**

@@ -66,7 +66,7 @@ class StreamQueue
 				$this->bot->init();
 				$this->bot->discord->on("ready", function ($discord) use (&$st) {
 
-					$r = sprintf("Downloading \"%s\"...", $st);
+					$r = sprintf("[StreamQueue] Downloading \"%s\"...", $st);
 
 					$guild = $discord->guilds->first();
 					$channel = $guild->channels->getAll("type", "text")->first();
@@ -83,7 +83,7 @@ class StreamQueue
 							return $channel->sendMessage(ob_get_clean());
 						}
 
-						printf("Download success!\n");
+						printf("[StreamQueue] Download success!\n");
 
 						try {
 							var_dump($channel);
@@ -131,7 +131,7 @@ class StreamQueue
 			}
 			pcntl_wait($status);
 		} else {
-			printf("There is no queue for guild %s\n", $guild_id);
+			printf("[StreamQueue] There is no queue for guild %s\n", $guild_id);
 		}
 	}
 }

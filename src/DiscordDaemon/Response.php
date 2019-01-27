@@ -31,7 +31,7 @@ class Response
 	 */
 	public function run(): void
 	{
-		var_dump("memory");
+		var_dump("memory", $this->message->author->username, $this->message->author->user->username, $this->message->content);
 		if (isset($this->message->author->username, $this->message->content)) {
 			$reply = null;
 

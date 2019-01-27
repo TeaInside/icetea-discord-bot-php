@@ -66,7 +66,7 @@ class StreamQueue
 				$this->bot->init();
 				$this->bot->discord->on("ready", function ($discord) use (&$st) {
 
-					$r = sprintf("[StreamQueue] Downloading \"%s\"...", $st);
+					$r = sprintf("Downloading \"%s\"...", $st);
 
 					$guild = $discord->guilds->first();
 					$channel = $guild->channels->getAll("type", "text")->first();
@@ -100,7 +100,9 @@ class StreamQueue
 					};
 
 					$channel->sendMessage($r)->then(function ($message) use ($act, $channel) {
-						$act($channel)->then(
+						$act($channel);
+
+						$channel->sendMessage("memememe")->then(
 							function () {
 								printf("The message was sent!\n");
 							}
@@ -111,7 +113,7 @@ class StreamQueue
 						);
 					    printf("The message was sent ~!\n");
 					    exit;
-					})->otherwise(function ($e) use ($act) {
+					})->otherwise(function ($e) use ($act, $channel) {
 						$act($channel)->then(
 							function () {
 								printf("The message was sent!\n");

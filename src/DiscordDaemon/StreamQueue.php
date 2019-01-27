@@ -102,7 +102,8 @@ class StreamQueue
 							});
 
 						} catch (\Error $e) {
-							
+							printf("\n\nAn error occured!\n");
+							var_dump($e->getMessage(), $e->getFile(), $e->getLine());
 						}
 					};
 

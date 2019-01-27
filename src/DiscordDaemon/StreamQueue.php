@@ -106,14 +106,27 @@ class StreamQueue
 
 								$guild = $discord->guilds->get("id", $guild_id);
 								$channel = $guild->channels->getAll("type", "text")->first();
-								$channel->sendMessage($r)->then(function ($message) use (&$file) {
-									var_dump("memset");
-								    // printf("The message was sent ~!\n");
-								    // exit;
+								$voiceChannel = $guild->channels->getAll("type", "voice")->first();
+								var_dump($voiceChannel);
+								$channel->sendMessage($r)->then(function ($message) use ($file) {
+								    printf("The message was sent ~!\n");
 								})->otherwise(function ($e) {
 								    printf("There was an error sending the message: %s\n", $e->getMessage());
 								    // exit;
 								});
+
+								var_dump("me");
+								if (is_string($file)) {
+									var_dump("me ok");
+									$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc) use (&$file) {
+									    echo "Joined voice channel.\r\n";
+									    $vc->playFile($file);
+									}, function ($e) {
+									    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
+									});
+								}
+
+								var_dump("me 2");
 							});
 							$this->bot->discord->run();
 							var_dump("memset 2ddd");

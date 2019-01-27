@@ -72,8 +72,8 @@ class MasterQueue
 			return false;
 		}
 
-		if (count($this->queue) >= 5) {
-			throw new QueueException("The system has reached the maximum number of queues (5 queues). Please try again later.");
+		if (count($this->queue) >= 25) {
+			throw new QueueException("The system has reached the maximum number of queues (25 queues). Please try again later.");
 		}
 
 		$this->queue[] = $ytid;

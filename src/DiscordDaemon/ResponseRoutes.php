@@ -33,10 +33,10 @@ trait ResponseRoutes
 			}
 			$r = "";
 			foreach ($st as $k => $st) {
-				$r .= "{$k}. {$st}";
+				$r .= "{$k}. {$st}\n";
 			}
 
-			return $r;
+			return trim($r);
 		}
 
 		if (preg_match("/^[\/\.\!\~]?vadd[\s\n]+([\S]+)$/USsi", $text, $m)) {

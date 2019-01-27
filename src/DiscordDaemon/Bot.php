@@ -18,7 +18,7 @@ final class Bot
 	/**
 	 * @var \Discord\Discord
 	 */	
-	private $discord;
+	public $discord;
 
 	/**
 	 * @param array $opt

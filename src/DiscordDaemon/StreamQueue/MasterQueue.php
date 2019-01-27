@@ -54,6 +54,14 @@ class MasterQueue
 	}
 		
 	/**
+	 * @return int
+	 */
+	public function countQueue(): int
+	{
+		return sizeof($this->queue);
+	}
+
+	/**
 	 * @param string $ytid
 	 * @throws DiscordDaemon\StreamQueue\QueueException
 	 * @return bool

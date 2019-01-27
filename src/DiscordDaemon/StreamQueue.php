@@ -116,6 +116,7 @@ class StreamQueue
 								});
 							});
 							$this->bot->discord->run();
+							var_dump("memset 2ddd");
 							exit;
 					    }
 					};

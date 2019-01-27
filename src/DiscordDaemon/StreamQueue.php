@@ -58,7 +58,7 @@ class StreamQueue
 	{
 		printf("Dispatching %s stream queue...\n");
 		$st = new MasterQueue($guild_id);
-		if ($this->countQueue()) {
+		if ($st->countQueue()) {
 			$st = $st->dequeue();
 			$this->bot->init();
 			$this->discord->on("ready", function ($discord) use (&$st) {

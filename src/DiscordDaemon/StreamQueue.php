@@ -56,7 +56,7 @@ class StreamQueue
 	 */
 	public function dispatch(string &$guild_id): void
 	{
-		printf("Dispatching %s stream queue...\n");
+		printf("Dispatching %s stream queue...\n", $guild_id);
 		$st = new MasterQueue($guild_id);
 		if ($st->countQueue()) {
 			$st = $st->dequeue();

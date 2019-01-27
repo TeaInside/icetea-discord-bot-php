@@ -77,54 +77,44 @@ class StreamQueue
 							$ytkernel = new YoutubeKernel($st, STORAGE_PATH."/mp3");
 							$ytkernel->run();
 						} catch (\Error $e) {
-							ob_start();
 							printf("\n\nAn error occured!\n");
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());
-							return $channel->sendMessage(ob_get_clean());
 						}
 
 						printf("[StreamQueue] Download success!\n");
 
-						try {
-							var_dump($channel);
-							var_dump($ytkernel);
-							$deffered = $channel->sendMessage(sprintf("\"%s\" has been downloaded (%s).", $st, $ytkernel->filename));
-							var_dump($deffered);
-							var_dump("me");
-						} catch (\Error $e) {
-							printf("\n\nAn error occured!\n");
-							var_dump($e->getMessage(), $e->getFile(), $e->getLine());
-						}
-
-						return $deffered;
+						return $ytkernel->filename;
 					};
 
-					$channel->sendMessage($r)->then(function ($message) use ($act, $channel) {
-						$act($channel);
+					$notify = function (&$file) use (&$st) {
+						 printf("Sending notification...\n");
+						 if (!pcntl_fork()) {
+					    	$this->bot->init();
+							$this->bot->discord->on("ready", function ($discord) use (&$st, &$file) {
+								$guild = $discord->guilds->first();
+								$channel = $guild->channels->getAll("type", "text")->first();
+								$channel->sendMessage($r)->then(function ($message) use ($act, $channel, $notify) {
+								    printf("The message was sent ~!\n");
+								    exit;
+								})->otherwise(function ($e) use ($act, $channel, $notify) {
+								    printf("There was an error sending the message: %s\n", $e->getMessage());
+								    exit;
+								});
+							});
+							$this->bot->discord->run();
+							exit;
+					    }
+					    pcntl_wait($status);
+					    $status = null;
+					    exit;
+					};
 
-						$channel->sendMessage("memememe")->then(
-							function () {
-								printf("The message was sent!\n");
-							}
-						)->otherwise(
-							function ($e) {
-								printf("There was an error sending the message: %s\n", $e->getMessage());
-							}
-						);
+					$channel->sendMessage($r)->then(function ($message) use ($act, $channel, $notify) {
 					    printf("The message was sent ~!\n");
-					    exit;
-					})->otherwise(function ($e) use ($act, $channel) {
-						$act($channel)->then(
-							function () {
-								printf("The message was sent!\n");
-							}
-						)->otherwise(
-							function ($e) {
-								printf("There was an error sending the message: %s\n", $e->getMessage());
-							}
-						);
+					    $notify($act($channel));
+					})->otherwise(function ($e) use ($act, $channel, $notify) {
 					    printf("There was an error sending the message: %s\n", $e->getMessage());
-					    exit;
+					    $notify($act($channel));
 					});
 
 				});

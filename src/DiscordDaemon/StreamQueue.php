@@ -108,7 +108,7 @@ class StreamQueue
 							$voiceChannel = $guild->channels->get("type", 2);
 							var_dump($voiceChannel);
 							$r .= ($qq = ob_get_contents())." end";
-							$channel->sendMessage($r)->then(function ($message) use ($file, $voiceChannel, $channel) {
+							$channel->sendMessage($r)->then(function ($message) use ($discord, $file, $voiceChannel, $channel) {
 							    printf("The message was sent ~! 2\n");
 							    if (is_string($file)) {
 							    	$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {

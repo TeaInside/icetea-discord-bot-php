@@ -70,8 +70,6 @@ class StreamQueue
 					$r = sprintf("Downloading \"%s\"...", $st);
 
 					$guild = $discord->guilds->get("id", $guild_id);
-					var_dump($guild->channels->get("type", 2));
-					die;
 					$channel = $guild->channels->getAll("type", "text")->first();
 					
 					$act = function ($channel) use (&$st) {
@@ -90,42 +88,44 @@ class StreamQueue
 					};
 
 					$notify = function ($file) use (&$st, &$guild_id) {
-							var_dump("send");
-						 printf("Sending notification...\n");
-						 // if (!pcntl_fork()) {
-					    	$this->bot->init();
-							$this->bot->discord->on("ready", function ($discord) use (&$st, &$file, &$guild_id) {
-								ob_start();
-								if (is_string($file)) {
-									if (file_exists(STORAGE_PATH."/mp3/{$file}")) {
-										$r = sprintf("Download finished!\nYoutube ID: \"%s\"\nFilename: \"%s\"\n\nPreparing streaming...", $st, $file);
-									} else {
-										$r = "Download succeded, but the file is missing.\n\nAborted!\n\nRunning next queue in background...";
-										$file = null;
-									}
+						printf("Sending notification...\n");
+				    	$this->bot->init();
+						$this->bot->discord->on("ready", function ($discord) use (&$st, &$file, &$guild_id) {
+							ob_start();
+							if (is_string($file)) {
+								if (file_exists(STORAGE_PATH."/mp3/{$file}")) {
+									$r = "ok";
+									//$r = sprintf("Download finished!\nYoutube ID: \"%s\"\nFilename: \"%s\"\n\nPreparing streaming...", $st, $file);
 								} else {
-									$r = "Error data";
+									$r = "Download succeded, but the file is missing.\n\nAborted!\n\nRunning next queue in background...";
+									$file = null;
 								}
-								var_dump("mememe");
-								$guild = $discord->guilds->get("id", $guild_id);
-								$channel = $guild->channels->getAll("type", "text")->first();
-								$voiceChannel = $guild->channels->getAll("type", "voice")->first();
-								var_dump($voiceChannel);
-								$r .= ($qq = ob_get_contents())." end";
-								echo $qq;
-								var_dump($guild->channels);
-								flush();
-								$channel->sendMessage($r)->then(function ($message) use ($file) {
-									var_dump(123123123);
-								    printf("The message was sent ~! 2\n");
-								})->otherwise(function ($e) {
-								    printf("There was an error sending the message: %s\n", $e->getMessage());
-								});
+							} else {
+								$r = "Error data";
+							}
+							$guild = $discord->guilds->get("id", $guild_id);
+							$channel = $guild->channels->getAll("type", "text")->first();
+							$voiceChannel = $guild->channels->get("type", 2);
+							var_dump($voiceChannel);
+							$r .= ($qq = ob_get_contents())." end";
+							$channel->sendMessage($r)->then(function ($message) use ($file, $voiceChannel, $channel) {
+							    printf("The message was sent ~! 2\n");
+							    if (is_string($file)) {
+							    	$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
+									    echo "Joined voice channel.\r\n";
+									    $vc->playFile($file)->then(function () { exit; });
+									}, function ($e) use ($channel) {
+										ob_start();
+									    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
+									    $channel->sendMessage(ob_get_clean()." end 333");
+									});
+							    }
+							})->otherwise(function ($e) {
+							    printf("There was an error sending the message: %s\n", $e->getMessage());
 							});
-							$this->bot->discord->run();
-							var_dump("memset 2ddd");
-							exit;
-					    //}
+						});
+						$this->bot->discord->run();
+						exit;
 					};
 
 					$channel->sendMessage($r)->then(function ($message) use ($act, $channel, $notify) {

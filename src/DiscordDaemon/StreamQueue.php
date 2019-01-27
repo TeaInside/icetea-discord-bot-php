@@ -87,7 +87,7 @@ class StreamQueue
 						return $ytkernel->filename;
 					};
 
-					$notify = function (&$file) use (&$st, &$guild_id) {
+					$notify = function ($file) use (&$st, &$guild_id) {
 						 printf("Sending notification...\n");
 						 if (!pcntl_fork()) {
 					    	$this->bot->init();
@@ -121,9 +121,10 @@ class StreamQueue
 					    if (is_string($file)) {
 					    	$file = STORAGE_PATH."/mp3/{$file}";
 					    	if (!pcntl_fork()) {
+					    		printf("[StreamQueue] initd\n");
 					    		$this->bot->discord->init();
 					    		$this->bot->discord->on("ready", function ($discord) use (&$guild_id, &$channel_id, &$file) {
-									printf("Radio is ready!\n");
+									printf("[StreamQueue] Streaming is ready!\n");
 									$guild = $discord->guilds->get("id", $guild_id);
 									$channel = $guild->channels->getAll("type", "voice")->first();
 									$discord->joinVoiceChannel($voiceChannel, false, false, null)->then(

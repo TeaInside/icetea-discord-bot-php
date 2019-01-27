@@ -42,10 +42,6 @@ class YoutubeKernel extends Thread
 	 */
 	public function run(): void
 	{
-		$oldPwd = getcwd();
-
-		chdir($this->chdir);
-
 		$fd = [
 			["pipe", "r"],
 			["file", "php://stdout", "w"],
@@ -55,7 +51,11 @@ class YoutubeKernel extends Thread
 		$ytdl = trim(shell_exec("which youtube-dl"));
 		$py = trim(shell_exec("which python"));
 		$ytid = escapeshellarg($this->ytid);
-		proc_open("exec {$py} {$ytdl} -f 18 --extract-audio --audio-format mp3 {$ytid} --cache-dir /var/cache/youtube-dl", $fd, $pipes);
-		chdir($oldPwd);
+		proc_open(
+			"exec {$py} {$ytdl} -f 18 --extract-audio --audio-format mp3 {$ytid} --cache-dir /var/cache/youtube-dl",
+			$fd,
+			$pipes,
+			$this->chdir
+		);
 	}
 }

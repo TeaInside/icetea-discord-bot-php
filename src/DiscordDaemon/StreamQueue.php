@@ -88,8 +88,9 @@ class StreamQueue
 						printf("Download success!\n");
 
 						try {
+							var_dump($channel);
 							var_dump($ytkernel);
-							$channel->sendMessage(sprintf("\"%s\" has been downloaded (%s).", $st, $ytkernel->filename))->then(
+							$me = $channel->sendMessage(sprintf("\"%s\" has been downloaded (%s).", $st, $ytkernel->filename))->then(
 								function () {
 									printf("The message was sent!\n");
 								}
@@ -98,6 +99,7 @@ class StreamQueue
 									printf("There was an error sending the message: %s\n", $e->getMessage());
 								}
 							);
+							var_dump($me);
 							var_dump("me");
 						} catch (\Error $e) {
 							printf("\n\nAn error occured!\n");

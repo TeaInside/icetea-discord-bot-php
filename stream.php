@@ -73,7 +73,8 @@ function callq(array &$argv): void
 		$discord->on("ready", function ($discord) use (&$argv) {
 			$guild = $discord->guilds->get("id", $argv["guild_id"]);
 			$channel = $guild->channels->getAll("type", 2)->first();
-			$this->sendMessage(
+			var_dump($channel);
+			$channel->sendMessage(
 				sprintf(
 					"Download finished!\nYoutube ID: \"%s\"\nFilename: \"%s\"\n\nPreparing streaming...",
 					$argv["ytid"],
@@ -82,5 +83,6 @@ function callq(array &$argv): void
 			)->then(function () { exit; })->otherwise(function () { exit; });
 		});
 		$discord->run();
+		exit;
 	}
 }

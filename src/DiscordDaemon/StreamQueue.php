@@ -63,12 +63,13 @@ class StreamQueue
 			$st = $st->dequeue();
 			printf("Preparing download for %s...\n", $st);
 			if (!pcntl_fork()) {
+				cli_set_process_title(sprintf("discordd: youtube_kernel --youtube-id=%s --download --extract-audio --audio-format mp3", $st));
 				$this->bot->init();
-				$this->bot->discord->on("ready", function ($discord) use (&$st) {
+				$this->bot->discord->on("ready", function ($discord) use (&$st, &$guild_id) {
 
 					$r = sprintf("Downloading \"%s\"...", $st);
 
-					$guild = $discord->guilds->first();
+					$guild = $discord->guilds->get("id", $guild_id);
 					$channel = $guild->channels->getAll("type", "text")->first();
 					
 					$act = function ($channel) use (&$st) {
@@ -86,19 +87,23 @@ class StreamQueue
 						return $ytkernel->filename;
 					};
 
-					$notify = function (&$file) use (&$st) {
+					$notify = function (&$file) use (&$st, &$guild_id) {
 						 printf("Sending notification...\n");
 						 if (!pcntl_fork()) {
 					    	$this->bot->init();
-							$this->bot->discord->on("ready", function ($discord) use (&$st, &$file) {
+							$this->bot->discord->on("ready", function ($discord) use (&$st, &$file, &$guild_id) {
 
 								if (is_string($file)) {
-									$r = sprintf("Download finished!\n\nYoutube ID: \"%s\"\nFilename: \"%s\"", $st, $file);
+									if (file_exists(STORAGE_PATH."/mp3/{$file}")) {
+										$r = sprintf("Download finished!\nYoutube ID: \"%s\"\nFilename: \"%s\"\n\nPreparing streaming...", $st, $file);	
+									} else {
+										$r = "Download succeded, but the file is missing.\n\nAborted!\n\nRunning next queue in background...";
+									}
 								} else {
 									$r = "Error data";
 								}
 
-								$guild = $discord->guilds->first();
+								$guild = $discord->guilds->get("id", $guild_id);
 								$channel = $guild->channels->getAll("type", "text")->first();
 								$channel->sendMessage($r)->then(function ($message) {
 								    printf("The message was sent ~!\n");
@@ -113,6 +118,59 @@ class StreamQueue
 					    }
 					    pcntl_wait($status);
 					    $status = null;
+					    if (is_string($file)) {
+					    	$file = STORAGE_PATH."/mp3/{$file}";
+					    	if (!pcntl_fork()) {
+					    		$this->discord->init();
+					    		$this->discord->on("ready", function ($discord) use (&$guild_id, &$channel_id, &$file) {
+									printf("Radio is ready!\n");
+									$guild = $discord->guilds->get("id", $guild_id);
+									$channel = $guild->channels->getAll("type", "voice")->first();
+									$discord->joinVoiceChannel($voiceChannel, false, false, null)->then(
+										/**
+										 * Promise resolved.
+										 */
+										function (VoiceClient $vc) use (&$file) {
+										    printf("[StreamQueue] Joined voice channel...\n");
+										    printf("[StreamQueue] Playing %s...\n", $file);
+										    $vc->setBitrate(128000)->then(
+									    		function () use ($vc, &$file) {
+										    		$vc->playFile($file)->otherwise(function($e){ 
+										    			printf("Error: %s\n", $e->getMessage());
+										    			exit;
+										    		})->then(function () {
+										    			exit;
+										    		});
+									    		}
+									    	)->otherwise(function($e){ 
+									    		printf("Error: %s\n", $e->getMessage());
+									    		exit;
+									    	});
+										},
+
+										/**
+										 * Promise rejected.
+										 */
+										function ($e) {
+									    	printf(
+									    		"There was an error joining the voice channel: %s\n",
+									    		$e->getMessage()
+									    	); 
+										}
+									)->otherwise(
+										function ($e) {
+									    	printf(
+									    		"There was an error joining the voice channel: %s\n",
+									    		$e->getMessage()
+									    	); 
+										}
+									);
+								});
+								$this->discord->run();
+					    		exit;
+					    	}
+					    	pcntl_wait($status);
+					    }					    
 					    exit;
 					};
 

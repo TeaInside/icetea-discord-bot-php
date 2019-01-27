@@ -43,7 +43,7 @@ class StreamQueue
 			}
 			unset($guildList);
 			printf("[StreamQueue] Sleeping for 10 seconds");
-			for ($i=0; $i < 10; $i++) {
+			for ($i=0; $i < 3; $i++) {
 				sleep(1);
 				printf(".");
 			}
@@ -70,6 +70,8 @@ class StreamQueue
 					$r = sprintf("Downloading \"%s\"...", $st);
 
 					$guild = $discord->guilds->get("id", $guild_id);
+					var_dump($guild->channels);
+					die;
 					$channel = $guild->channels->getAll("type", "text")->first();
 					
 					$act = function ($channel) use (&$st) {

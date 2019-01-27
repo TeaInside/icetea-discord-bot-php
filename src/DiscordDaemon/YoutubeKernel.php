@@ -64,6 +64,7 @@ class YoutubeKernel extends Thread
 		);
 		proc_close($me);
 		if (preg_match("/\[ffmpeg\] Destination: (.*.mp3)/Usi", ob_get_clean(), $m)) {
+			var_dump($m);
 			$shm_key = ftok(__FILE__, 'a');
 			$shmid = shmop_open($shm_key, "c", 0644, 255);
 			shmop_write($shmid, sprintf("%s\0", $m[1]), 0);

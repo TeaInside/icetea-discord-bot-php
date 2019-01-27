@@ -90,7 +90,7 @@ class StreamQueue
 					$fileName = shmop_read($shmid, 0, 255);
 					shmop_close($shmid);
 					printf("Download success!\n");
-					
+					var_dump($fileName);
 					$i = strpos($fileName, "\0");
 					if ($i === false) {
 						return $fileName;

@@ -121,8 +121,8 @@ class StreamQueue
 					    if (is_string($file)) {
 					    	$file = STORAGE_PATH."/mp3/{$file}";
 					    	if (!pcntl_fork()) {
-					    		$this->discord->init();
-					    		$this->discord->on("ready", function ($discord) use (&$guild_id, &$channel_id, &$file) {
+					    		$this->bot->discord->init();
+					    		$this->bot->discord->on("ready", function ($discord) use (&$guild_id, &$channel_id, &$file) {
 									printf("Radio is ready!\n");
 									$guild = $discord->guilds->get("id", $guild_id);
 									$channel = $guild->channels->getAll("type", "voice")->first();
@@ -166,7 +166,7 @@ class StreamQueue
 										}
 									);
 								});
-								$this->discord->run();
+								$this->bot->discord->run();
 					    		exit;
 					    	}
 					    	pcntl_wait($status);

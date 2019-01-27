@@ -46,7 +46,7 @@ class MasterQueue
 			$this->queue = json_decode(file_get_contents($this->queueFile), true);
 			if (!is_array($this->queue)) {
 				$this->queue = [];
-			}1
+			}
 			$this->queue = [];
 			file_put_contents($this->queueFile, "[]");
 		}

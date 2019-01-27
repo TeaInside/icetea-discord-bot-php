@@ -91,12 +91,19 @@ class StreamQueue
 						 if (!pcntl_fork()) {
 					    	$this->bot->init();
 							$this->bot->discord->on("ready", function ($discord) use (&$st, &$file) {
+
+								if (is_string($file)) {
+									$r = sprintf("Download finished!\n\nYoutube ID: \"%s\"\nFilename: \"%s\"", $st, $file);
+								} else {
+									$r = "Error data";
+								}
+
 								$guild = $discord->guilds->first();
 								$channel = $guild->channels->getAll("type", "text")->first();
-								$channel->sendMessage($r)->then(function ($message) use ($act, $channel, $notify) {
+								$channel->sendMessage($r)->then(function ($message) {
 								    printf("The message was sent ~!\n");
 								    exit;
-								})->otherwise(function ($e) use ($act, $channel, $notify) {
+								})->otherwise(function ($e) {
 								    printf("There was an error sending the message: %s\n", $e->getMessage());
 								    exit;
 								});

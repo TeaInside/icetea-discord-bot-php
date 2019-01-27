@@ -96,6 +96,7 @@ class StreamQueue
 								if (file_exists(STORAGE_PATH."/mp3/{$file}")) {
 									$r = "ok";
 									//$r = sprintf("Download finished!\nYoutube ID: \"%s\"\nFilename: \"%s\"\n\nPreparing streaming...", $st, $file);
+									$file = STORAGE_PATH."/mp3/{$file}";
 								} else {
 									$r = "Download succeded, but the file is missing.\n\nAborted!\n\nRunning next queue in background...";
 									$file = null;

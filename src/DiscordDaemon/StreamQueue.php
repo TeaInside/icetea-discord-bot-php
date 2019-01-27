@@ -159,7 +159,7 @@ class StreamQueue
 								   //  		exit;
 								   //  	}
 								   //  	pcntl_wait($status);
-								   //  }
+								    }
 								    exit;
 								})->otherwise(function ($e) {
 								    printf("There was an error sending the message: %s\n", $e->getMessage());

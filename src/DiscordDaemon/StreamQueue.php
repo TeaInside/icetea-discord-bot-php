@@ -72,7 +72,7 @@ class StreamQueue
 					$guild = $discord->guilds->get("id", $guild_id);
 					$channel = $guild->channels->getAll("type", "text")->first();
 					
-					$act = function ($channel) use (&$st) {
+					$act = function ($channel) use (&$st, $discord) {
 
 						try {
 							$ytkernel = new YoutubeKernel($st, STORAGE_PATH."/mp3");
@@ -81,20 +81,28 @@ class StreamQueue
 							printf("\n\nAn error occured!\n");
 							var_dump($e->getMessage(), $e->getFile(), $e->getLine());
 						}
-
+						$file = STORAGE_PATH."/mp3/{$ytkernel->file}";
+						unset($youtube_kernel);
 						printf("[StreamQueue] Download success!\n");
 
+						$discord->joinVoiceChannel($voiceChannel)->then(function (VoiceClient $vc, $channel, $file) {
+						    echo "Joined voice channel.\r\n";
+						    $q = $vc->playFile($file)->then(function () use ($channel) {
+							    echo "OK";
+						    })->otherwise(function () use ($channel) {
+							    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
+						    });
+						}, function ($e) use ($channel) {
+						    echo "There was an error joining the voice channel: {$e->getMessage()}\r\n"; 
+						});
 
-
-						shell_exec("sleep 1000");
-						var_dump(123);
 					};
 
-					$channel->sendMessage($r)->then(function ($message) use ($act, $channel, $notify) {
+					$channel->sendMessage($r)->then(function ($message) use ($act, $channel) {
 					    printf("The message was sent ~! 1\n");
 					    $act($channel);
 					    exit;
-					})->otherwise(function ($e) use ($act, $channel, $notify) {
+					})->otherwise(function ($e) use ($act, $channel) {
 					    printf("There was an error sending the message: %s\n", $e->getMessage());
 					    $act($channel);
 					    exit;

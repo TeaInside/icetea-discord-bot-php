@@ -88,6 +88,7 @@ class StreamQueue
 					};
 
 					$notify = function ($file) use (&$st, &$guild_id) {
+							var_dump("send");
 						 printf("Sending notification...\n");
 						 // if (!pcntl_fork()) {
 					    	$this->bot->init();
@@ -103,13 +104,14 @@ class StreamQueue
 								} else {
 									$r = "Error data";
 								}
-
+								var_dump("mememe")
 								$guild = $discord->guilds->get("id", $guild_id);
 								$channel = $guild->channels->getAll("type", "text")->first();
 								$voiceChannel = $guild->channels->getAll("type", "voice")->first();
 								var_dump($voiceChannel);
 								$channel->sendMessage($r)->then(function ($message) use ($file) {
-								    printf("The message was sent ~!\n");
+									var_dump(123123123);
+								    printf("The message was sent ~! 2\n");
 								})->otherwise(function ($e) {
 								    printf("There was an error sending the message: %s\n", $e->getMessage());
 								});
@@ -117,15 +119,17 @@ class StreamQueue
 							$this->bot->discord->run();
 							var_dump("memset 2ddd");
 							exit;
-					    // }
+					    //}
 					};
 
 					$channel->sendMessage($r)->then(function ($message) use ($act, $channel, $notify) {
-					    printf("The message was sent ~!\n");
+					    printf("The message was sent ~! 1\n");
 					    $notify($act($channel));
+					    exit;
 					})->otherwise(function ($e) use ($act, $channel, $notify) {
 					    printf("There was an error sending the message: %s\n", $e->getMessage());
 					    $notify($act($channel));
+					    exit;
 					});
 
 				});

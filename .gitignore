@@ -8,4 +8,5 @@
 *.lock
 /vendor/
 /config.php
+/vendor.tar.gz
 /.phpintel/

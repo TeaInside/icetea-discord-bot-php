@@ -56,7 +56,7 @@ class YoutubeKernel
 		$py = trim(shell_exec("which python"));
 		$ytid = escapeshellarg($this->ytid);
 		$me = proc_open(
-			"exec {$py} {$ytdl} -f 18 --extract-audio --audio-format mp3 {$ytid} --cache-dir /var/cache/youtube-dl",
+			"exec {$py} {$ytdl} -f 18 --proxy \"socks5://127.0.0.1:49050\" --extract-audio --audio-format mp3 {$ytid} --cache-dir /var/cache/youtube-dl",
 			$fd,
 			$pipes,
 			$this->chdir

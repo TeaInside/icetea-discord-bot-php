@@ -4,4 +4,3 @@ while [[ 1 ]]; do
 	echo $pd | grep -oP '\d+' && kill -9 $pd && echo killed || echo nothing;
 	sleep 120;
 done;
-
